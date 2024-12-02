@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     // AnimationController utama untuk logo scale dan movement
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 850),
       vsync: this,
     );
 
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     // AnimationController untuk animasi rotasi
     _rotationController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 2750),
       vsync: this,
     );
 
@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     // Setelah animasi selesai, navigasi ke halaman berikutnya
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted) {
         _navigateWithAnimation(context);
       }
