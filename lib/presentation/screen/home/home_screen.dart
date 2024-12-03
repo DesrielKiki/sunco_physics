@@ -67,84 +67,94 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 28),
-          Container(
-            width: double.infinity,
-            height: 188,
-            margin: const EdgeInsets.symmetric(horizontal: 32.0),
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            decoration: const BoxDecoration(
-              color: ColorConfig.darkBlue,
-              borderRadius: BorderRadius.all(
-                Radius.circular(30.0),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 12.0,
-                  offset: Offset(0, 4),
-                  spreadRadius: 3.0,
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/calculatorList');
+            },
+            child: Container(
+              width: double.infinity,
+              height: 188,
+              margin: const EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              decoration: const BoxDecoration(
+                color: ColorConfig.darkBlue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30.0),
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Kalkulator',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.start,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 12.0,
+                    offset: Offset(0, 4),
+                    spreadRadius: 3.0,
                   ),
-                ),
-                Image.asset(
-                  'assets/ic_kalkulator.png',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-          Container(
-            width: double.infinity,
-            height: 188,
-            margin: const EdgeInsets.symmetric(horizontal: 32.0),
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            decoration: const BoxDecoration(
-              color: ColorConfig.darkBlue,
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 12.0,
-                  offset: Offset(0, 4),
-                  spreadRadius: 3.0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/ic_book.png',
-                ),
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 4.0),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Expanded(
                     child: Text(
-                      'Materi',
+                      'Kalkulator',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                      textAlign: TextAlign.end,
+                      textAlign: TextAlign.start,
                     ),
                   ),
-                ),
-              ],
+                  Image.asset(
+                    'assets/ic_kalkulator.png',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/lessonList');
+            },
+            child: Container(
+              width: double.infinity,
+              height: 188,
+              margin: const EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              decoration: const BoxDecoration(
+                color: ColorConfig.darkBlue,
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 12.0,
+                    offset: Offset(0, 4),
+                    spreadRadius: 3.0,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/ic_book.png',
+                  ),
+                  const Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 4.0),
+                      child: Text(
+                        'Materi',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

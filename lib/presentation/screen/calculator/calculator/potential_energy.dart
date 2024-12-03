@@ -50,7 +50,6 @@ class _PotentialEnergyCalculatorScreenState
   void initState() {
     super.initState();
 
-    // Animasi untuk header, shadow, dan opacity
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -68,7 +67,6 @@ class _PotentialEnergyCalculatorScreenState
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    // Mulai animasi saat screen dibuka
     _animationController.forward();
   }
 
@@ -87,35 +85,27 @@ class _PotentialEnergyCalculatorScreenState
             Stack(
               clipBehavior: Clip.none,
               children: [
-                // Layer Shadow dengan animasi tanpa zigzag
                 Positioned(
-                  top: _animation.value *
-                      0.4, // Mengubah posisi shadow mengikuti header
+                  top: _animation.value * 0.4,
                   left: 0,
                   right: 0,
                   child: ClipPath(
-                    clipper: ZigzagClipper(), // Hanya untuk header
+                    clipper: ZigzagClipper(),
                     child: Container(
                       height: 150,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.3),
-                            blurRadius: _shadowAnimation.value *
-                                16.0, // Mengatur blur agar lebih halus
-                            offset: Offset(
-                                0,
-                                _shadowAnimation.value *
-                                    4), // Offset shadow mengikuti gerakan
-                            spreadRadius: _shadowAnimation.value *
-                                2.0, // Spread lebih terkendali
+                            blurRadius: _shadowAnimation.value * 16.0,
+                            offset: Offset(0, _shadowAnimation.value * 4),
+                            spreadRadius: _shadowAnimation.value * 2.0,
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                // Layer Zigzag Header dengan animasi
                 AnimatedBuilder(
                   animation: _animation,
                   builder: (context, child) {
@@ -133,11 +123,8 @@ class _PotentialEnergyCalculatorScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: MediaQuery.of(context)
-                                    .padding
-                                    .top, // Jika tidak perlu, bisa dihapus
+                                height: MediaQuery.of(context).padding.top,
                               ),
-                              // Konten Teks dengan FadeTransition
                               FadeTransition(
                                 opacity: _opacityAnimation,
                                 child: const Text(
