@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 52),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            padding: EdgeInsets.symmetric(horizontal: 42.0),
             child: Text(
               'Pilih Menu',
               style: TextStyle(
@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 52),
+          const SizedBox(height: 28),
           Container(
             width: double.infinity,
             height: 188,
@@ -131,14 +131,17 @@ class HomeScreen extends StatelessWidget {
                   'assets/ic_book.png',
                 ),
                 const Expanded(
-                  child: Text(
-                    'Materi',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 4.0),
+                    child: Text(
+                      'Materi',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.end,
                     ),
-                    textAlign: TextAlign.start,
                   ),
                 ),
               ],

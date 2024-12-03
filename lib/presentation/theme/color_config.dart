@@ -7,6 +7,7 @@ class ColorConfig {
   static const Color black = Color(0xff080808);
   static const Color softCyan = Color(0xff60EFFF);
   static const Color darkBlue = Color(0xff0061FF);
+  static const Color grey = Color(0xffD9D9D9);
   static const LinearGradient gradientBrand = LinearGradient(colors: [
     darkBlue,
     softCyan,
