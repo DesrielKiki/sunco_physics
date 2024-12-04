@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/navigation/home_navigation.dart';
 import 'package:sunco_physics/presentation/screen/auth/register/register_screen.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -113,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 700),
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            const HomeScreen(),
+                            const HomeNavigationPage(),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
                           return FadeTransition(

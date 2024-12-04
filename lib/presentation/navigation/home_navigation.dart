@@ -14,14 +14,12 @@ class HomeNavigationPage extends StatefulWidget {
 class _HomeNavigationPageState extends State<HomeNavigationPage> {
   int selectedIndex = 0;
 
-  // List of pages to navigate
   final List<Widget> _pages = <Widget>[
     const HomeScreen(),
     const HistoryScreen(),
     const ProfileScreen(),
   ];
 
-  // Handle navigation bar item taps
   void _onTappedItem(int index) {
     setState(() {
       selectedIndex = index;
@@ -31,42 +29,51 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[selectedIndex], // Render the selected page
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: _onTappedItem,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color:
-                  selectedIndex == 0 ? ColorConfig.primaryColor : Colors.grey,
-            ),
-            label: selectedIndex == 0 ? 'Home' : '',
+      body: _pages[selectedIndex],
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 52),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: _onTappedItem,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: selectedIndex == 0
+                      ? ColorConfig.onPrimaryColor
+                      : ColorConfig.grey,
+                ),
+                label: selectedIndex == 0 ? 'Home' : '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.history,
+                  color: selectedIndex == 1
+                      ? ColorConfig.onPrimaryColor
+                      : ColorConfig.grey,
+                ),
+                label: selectedIndex == 1 ? 'History' : '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  color: selectedIndex == 2
+                      ? ColorConfig.onPrimaryColor
+                      : ColorConfig.grey,
+                ),
+                label: selectedIndex == 2 ? 'Profile' : '',
+              ),
+            ],
+            selectedItemColor: ColorConfig.onPrimaryColor,
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
+            elevation: 10,
+            backgroundColor: ColorConfig.primaryColor,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.history,
-              color:
-                  selectedIndex == 1 ? ColorConfig.primaryColor : Colors.grey,
-            ),
-            label: selectedIndex == 1 ? 'History' : '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color:
-                  selectedIndex == 2 ? ColorConfig.primaryColor : Colors.grey,
-            ),
-            label: selectedIndex == 2 ? 'Profile' : '',
-          ),
-        ],
-        selectedItemColor: ColorConfig.primaryColor,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
-        elevation: 10,
-        backgroundColor: Colors.white,
+        ),
       ),
     );
   }
