@@ -8,6 +8,9 @@ import 'package:sunco_physics/presentation/screen/splash/splash_screen.dart';
 class AppRoutes {
   static const String splash = '/';
   static const String home = '/home';
+  static const String history = '/history';
+  static const String profile = '/profile';
+
   static const String calculatorList = '/calculatorList';
   static const String lessonList = '/lessonList';
   static const String potentialEnergy = '/potential_energy';
