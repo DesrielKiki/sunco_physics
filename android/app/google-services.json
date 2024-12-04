@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "454683126074",
+    "project_id": "sunco-physics",
+    "storage_bucket": "sunco-physics.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454683126074:android:f06c1b1bd4c2bdb6bbc803",
+        "android_client_info": {
+          "package_name": "id.desriel.sunco_physics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLtnmjvn_bGJwY6wqcElRnyXbOyAZetzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

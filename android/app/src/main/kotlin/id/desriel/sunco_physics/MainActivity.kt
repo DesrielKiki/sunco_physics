@@ -1,4 +1,4 @@
-package com.example.sunco_physics
+package id.desriel.sunco_physics
 
 import io.flutter.embedding.android.FlutterActivity
 
