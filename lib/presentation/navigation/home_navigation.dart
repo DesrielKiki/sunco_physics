@@ -13,6 +13,7 @@ class HomeNavigationPage extends StatefulWidget {
 
 class _HomeNavigationPageState extends State<HomeNavigationPage> {
   int selectedIndex = 0;
+  final PageController _pagecontroller = PageController();
 
   final List<Widget> _pages = <Widget>[
     const HomeScreen(),
@@ -20,16 +21,33 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
     const ProfileScreen(),
   ];
 
-  void _onTappedItem(int index) {
+  void _onPageChanged(int index) {
     setState(() {
       selectedIndex = index;
     });
   }
 
+  void _onTappedItem(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    _pagecontroller.animateToPage(
+      index,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[selectedIndex],
+      body: PageView(
+        controller: _pagecontroller,
+        onPageChanged: _onPageChanged,
+        children: _pages,
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 52),
         child: ClipRRect(
