@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
+import 'package:sunco_physics/presentation/screen/auth/login/login_screen.dart';
+//import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 700),
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const HomeScreen(),
+            const LoginScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,
