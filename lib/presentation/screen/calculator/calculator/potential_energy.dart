@@ -79,6 +79,43 @@ class _PotentialEnergyCalculatorScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorConfig.darkBlue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Navigasi kembali ke layar sebelumnya
+          },
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FadeTransition(
+              opacity: _opacityAnimation,
+              child: const Text(
+                'KALKULATOR',
+                style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  height: 1,
+                ),
+              ),
+            ),
+            FadeTransition(
+              opacity: _opacityAnimation,
+              child: const Text(
+                'Energi Potensial',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  height: 1,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -92,7 +129,7 @@ class _PotentialEnergyCalculatorScreenState
                   child: ClipPath(
                     clipper: ZigzagClipper(),
                     child: Container(
-                      height: 150,
+                      height: 47,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -115,7 +152,7 @@ class _PotentialEnergyCalculatorScreenState
                         offset: Offset(0, _animation.value),
                         child: Container(
                           width: double.infinity,
-                          height: 160,
+                          height: 45,
                           color: ColorConfig.darkBlue,
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -124,29 +161,6 @@ class _PotentialEnergyCalculatorScreenState
                             children: [
                               SizedBox(
                                 height: MediaQuery.of(context).padding.top,
-                              ),
-                              FadeTransition(
-                                opacity: _opacityAnimation,
-                                child: const Text(
-                                  'KALKULATOR',
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1,
-                                  ),
-                                ),
-                              ),
-                              FadeTransition(
-                                opacity: _opacityAnimation,
-                                child: const Text(
-                                  'Energi Potensial',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    height: 1,
-                                  ),
-                                ),
                               ),
                             ],
                           ),
