@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunco_physics/presentation/navigation/home_navigation.dart';
 import 'package:sunco_physics/presentation/screen/auth/login/login_screen.dart';
-//import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,7 +25,11 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+    _checkLoginStatus();
+  }
 
+  void _initializeAnimations() {
     _controller = AnimationController(
       duration: const Duration(milliseconds: 850),
       vsync: this,
@@ -57,20 +62,29 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward().then((_) {
       _rotationController.forward();
     });
-
-    Future.delayed(const Duration(milliseconds: 5000), () {
-      if (mounted) {
-        _navigateWithAnimation(context);
-      }
-    });
   }
 
-  void _navigateWithAnimation(BuildContext context) {
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isLoggedIn = prefs.getBool('isLoggedIn');
+
+    // Tunggu animasi selesai sebelum melakukan navigasi
+    await Future.delayed(const Duration(seconds: 5));
+
+    if (mounted) {
+      if (isLoggedIn == true) {
+        _navigateTo(const HomeNavigationPage());
+      } else {
+        _navigateTo(const LoginScreen());
+      }
+    }
+  }
+
+  void _navigateTo(Widget targetPage) {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 700),
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const LoginScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) => targetPage,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,

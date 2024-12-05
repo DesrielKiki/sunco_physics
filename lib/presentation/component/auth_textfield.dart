@@ -6,12 +6,14 @@ class AuthTextField extends StatefulWidget {
   final String hintText;
   final IconData icon;
   final bool obscureText;
+  final TextEditingController controller;
 
   const AuthTextField({
     super.key,
     required this.label,
     required this.hintText,
     required this.icon,
+    required this.controller,
     this.obscureText = false,
   });
 
@@ -30,7 +32,8 @@ class _AuthTextFieldState extends State<AuthTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(

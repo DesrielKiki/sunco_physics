@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunco_physics/data/helper/validation_helper.dart';
+import 'package:sunco_physics/presentation/component/auth_button.dart';
+import 'package:sunco_physics/presentation/component/auth_support_text.dart';
 import 'package:sunco_physics/presentation/component/auth_textfield.dart';
 import 'package:sunco_physics/presentation/navigation/home_navigation.dart';
 import 'package:sunco_physics/presentation/screen/auth/register/register_screen.dart';
@@ -12,6 +17,63 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool _isLoading = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String? emailError = ValidationHelper.validateEmail(_emailController.text);
+    String? passwordError =
+        ValidationHelper.validatePassword(_passwordController.text);
+
+    if (emailError != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(emailError)));
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    if (passwordError != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(passwordError)));
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeNavigationPage()),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      String errorMessage = ValidationHelper.handleAuthException(e);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage)));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +106,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 48),
-                  const AuthTextField(
+                  AuthTextField(
+                      controller: _emailController,
                       label: "Email",
                       hintText: "user@example.com",
                       icon: Icons.email),
                   const SizedBox(height: 16),
-                  const AuthTextField(
+                  AuthTextField(
+                      controller: _passwordController,
                       label: "Password",
                       hintText: "Your Password",
                       icon: Icons.visibility,
@@ -74,88 +138,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 48,
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: ColorConfig.darkBlue,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      minimumSize: const Size(double.infinity, 50),
-                    ),
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 700),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const HomeNavigationPage(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: ScaleTransition(
-                                scale:
-                                    Tween<double>(begin: 0.8, end: 1.0).animate(
-                                  CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOut,
-                                  ),
-                                ),
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
-                        (route) => false,
-                      );
-                    },
-                    child: const Text(
-                      "Sign In",
-                      style: TextStyle(
-                          color: ColorConfig.onPrimaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : AuthButton(buttonText: "Sign In", onPressed: _login),
                   const SizedBox(
                     height: 16,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                          color: ColorConfig.onPrimaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: ColorConfig.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                  SupportText(
+                      firstText: "Don't have account? ",
+                      secondText: "Sign up",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterScreen(),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
+                        );
+                      }),
                 ],
               ),
             ),

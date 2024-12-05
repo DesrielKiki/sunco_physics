@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/database/calculator_data.dart';
+import 'package:sunco_physics/data/model/calculator_data.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class CalculatorListScreen extends StatefulWidget {
