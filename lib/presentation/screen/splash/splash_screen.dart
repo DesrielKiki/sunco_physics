@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
     _rotationController = AnimationController(
       duration: const Duration(milliseconds: 2750),
       vsync: this,
-    );
+    )..repeat();
 
     _rotationAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _rotationController, curve: Curves.linear),
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward().then((_) {
-      _rotationController.forward();
+      _rotationController.repeat();
     });
   }
 

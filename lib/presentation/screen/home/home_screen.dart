@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 42.0),
             child: Text(
-              'Pilih Menu',
+              'Choose menu',
               style: TextStyle(
                 fontSize: 28,
                 color: ColorConfig.black,
