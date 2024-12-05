@@ -9,6 +9,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoggedIn = false;
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Access Denied"),
+          content: const Text("Please log in to access the calculator."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,20 +93,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 28),
           GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/calculatorList');
-            },
+            onTap: isLoggedIn
+                ? () {
+                    Navigator.pushNamed(context, '/calculatorList');
+                  }
+                : _showAlertDialog,
             child: Container(
               width: double.infinity,
               height: 188,
               margin: const EdgeInsets.symmetric(horizontal: 32.0),
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              decoration: const BoxDecoration(
-                color: ColorConfig.darkBlue,
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: isLoggedIn ? ColorConfig.darkBlue : ColorConfig.grey,
+                borderRadius: const BorderRadius.all(
                   Radius.circular(30.0),
                 ),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 12.0,

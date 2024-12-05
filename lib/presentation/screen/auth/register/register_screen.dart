@@ -117,84 +117,109 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: ColorConfig.gradientBrand),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: ColorConfig.onPrimaryColor,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Welcome. Enter your email and Password to sign up",
-                    style: TextStyle(
-                        color: ColorConfig.onPrimaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
-                  AuthTextField(
-                    controller: _fullNameController,
-                    label: "Full Name",
-                    hintText: "Your Full Name",
-                    icon: Icons.person,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    controller: _usernameController,
-                    label: "Username",
-                    hintText: "Your username",
-                    icon: Icons.person_2_outlined,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    label: "Email",
-                    hintText: "user@example.com",
-                    icon: Icons.email,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    controller: _passwordController,
-                    label: "Password",
-                    hintText: "Your Password",
-                    icon: Icons.lock,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 32),
-                  AuthButton(
-                    buttonText: _isLoading ? "Loading..." : "Sign Up",
-                    onPressed: _isLoading ? null : _register,
-                  ),
-                  const SizedBox(height: 16),
-                  SupportText(
-                    firstText: "Already have an account? ",
-                    secondText: "Sign in",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: ColorConfig.onPrimaryColor,
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Welcome. Enter your email and Password to sign up",
+                        style: TextStyle(
+                          color: ColorConfig.onPrimaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 48),
+                      AuthTextField(
+                        controller: _fullNameController,
+                        label: "Full Name",
+                        hintText: "Your Full Name",
+                        icon: Icons.person,
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextField(
+                        controller: _usernameController,
+                        label: "Username",
+                        hintText: "Your username",
+                        icon: Icons.person_2_outlined,
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
+                        label: "Email",
+                        hintText: "user@example.com",
+                        icon: Icons.email,
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextField(
+                        controller: _passwordController,
+                        label: "Password",
+                        hintText: "Your Password",
+                        icon: Icons.lock,
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 32),
+                      AuthButton(
+                        buttonText: _isLoading ? "Loading..." : "Sign Up",
+                        onPressed: _isLoading ? null : _register,
+                      ),
+                      const SizedBox(height: 16),
+                      SupportText(
+                        firstText: "Already have an account? ",
+                        secondText: "Sign in",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const HomeNavigationPage(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: const Text(
+                  "Continue without login",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
