@@ -48,6 +48,8 @@ class ValidationHelper {
           return 'Email belum terdaftar. Silakan registrasi.';
         case 'wrong-password':
           return 'Password salah. Silakan coba lagi.';
+        case 'invalid-credential':
+          return 'Kredensial tidak valid. Pastikan email dan password Anda benar.';
         case 'email-already-in-use':
           return 'Email sudah digunakan. Silakan gunakan email lain.';
         case 'user-disabled':

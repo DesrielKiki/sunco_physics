@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sunco_physics/data/helper/firebase_helper.dart';
@@ -160,6 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   AuthTextField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     label: "Email",
                     hintText: "user@example.com",

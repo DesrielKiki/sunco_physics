@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
+    // Mulai loading hanya setelah proses validasi dimulai
     setState(() {
       _isLoading = true;
     });
@@ -31,27 +32,32 @@ class _LoginScreenState extends State<LoginScreen> {
     String? passwordError =
         ValidationHelper.validatePassword(_passwordController.text);
 
+    // Jika ada error validasi, hentikan proses dan tampilkan error
     if (emailError != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(emailError)));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(emailError)));
+      }
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // Set loading menjadi false karena ada error
       });
-      return;
+      return; // Hentikan proses login
     }
 
     if (passwordError != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(passwordError)));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(passwordError)));
+      }
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // Set loading menjadi false karena ada error
       });
-      return;
+      return; // Hentikan proses login
     }
 
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      // Proses login hanya jika validasi berhasil
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -59,15 +65,19 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => HomeNavigationPage()),
-        (Route<dynamic> route) => false,
-      );
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeNavigationPage()),
+          (Route<dynamic> route) => false,
+        );
+      }
     } catch (e) {
+      print('Login error: $e'); // Debugging log
       String errorMessage = ValidationHelper.handleAuthException(e);
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(errorMessage)));
     } finally {
+      // Menghentikan indikator loading setelah selesai, terlepas dari sukses/gagal
       setState(() {
         _isLoading = false;
       });
@@ -107,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 48),
                   AuthTextField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       label: "Email",
                       hintText: "user@example.com",
