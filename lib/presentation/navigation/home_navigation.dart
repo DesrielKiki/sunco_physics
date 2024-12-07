@@ -50,7 +50,7 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 52),
-        child: ClipRRect(
+        child: ClipRRect( 
           borderRadius: BorderRadius.circular(20),
           child: BottomNavigationBar(
             currentIndex: selectedIndex,
