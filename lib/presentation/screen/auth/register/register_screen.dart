@@ -6,6 +6,7 @@ import 'package:sunco_physics/data/helper/validation_helper.dart';
 import 'package:sunco_physics/presentation/component/auth_button.dart';
 import 'package:sunco_physics/presentation/component/auth_support_text.dart';
 import 'package:sunco_physics/presentation/component/auth_textfield.dart';
+import 'package:sunco_physics/presentation/component/gender_selection.dart';
 import 'package:sunco_physics/presentation/navigation/home_navigation.dart';
 import 'package:sunco_physics/presentation/screen/auth/login/login_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -23,6 +24,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  String? _selectedGender;
+
   bool _isLoading = false;
   final FirebaseHelper _firebaseHelper = FirebaseHelper();
 
@@ -31,7 +34,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _isLoading = true;
     });
 
-    // Validasi Input
     List<String> errors = [];
     String? emailError = ValidationHelper.validateEmail(_emailController.text);
     String? passwordError =
@@ -57,22 +59,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     try {
-      // Registrasi Firebase
       UserCredential? userCredential = await _firebaseHelper.registerUser(
         _emailController.text,
         _passwordController.text,
       );
 
       if (userCredential != null) {
-        // Simpan Data Pengguna
         await _firebaseHelper.saveUserData(
           userCredential.user!.uid,
           _emailController.text,
           _fullNameController.text,
           _usernameController.text,
+          _selectedGender ?? 'Rather not to say',
         );
 
-        // Menyimpan Status Login
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
 
@@ -159,6 +159,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         label: "Username",
                         hintText: "Your username",
                         icon: Icons.person_2_outlined,
+                      ),
+                      const SizedBox(height: 16),
+                      GenderDropdown(
+                        selectedGender: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                        },
                       ),
                       const SizedBox(height: 16),
                       AuthTextField(
