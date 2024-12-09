@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +13,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn = false;
   bool showBlurOverlay = false;
+
+  Future<void> _loadLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginStatus();
+  }
 
   void _showAlertDialog() {
     setState(() {
@@ -31,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             AlertDialog(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(  
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               contentPadding: EdgeInsets.zero,
