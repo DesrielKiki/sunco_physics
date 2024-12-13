@@ -35,18 +35,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     List<String> errors = [];
-    String? emailError = ValidationHelper.validateEmail(_emailController.text);
-    String? passwordError =
-        ValidationHelper.validatePassword(_passwordController.text);
     String? fullNameError = ValidationHelper.validateField(
         _fullNameController.text, "Nama Lengkap");
     String? usernameError =
         ValidationHelper.validateField(_usernameController.text, "Username");
 
-    if (emailError != null) errors.add(emailError);
-    if (passwordError != null) errors.add(passwordError);
+    String? emailError = ValidationHelper.validateEmail(_emailController.text);
+    String? passwordError =
+        ValidationHelper.validatePassword(_passwordController.text);
+
     if (fullNameError != null) errors.add(fullNameError);
     if (usernameError != null) errors.add(usernameError);
+    if (emailError != null) errors.add(emailError);
+    if (passwordError != null) errors.add(passwordError);
 
     if (errors.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -67,9 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (userCredential != null) {
         await _firebaseHelper.saveUserData(
           userCredential.user!.uid,
-          _emailController.text,
           _fullNameController.text,
           _usernameController.text,
+          _emailController.text,
           _selectedGender ?? 'Rather not to say',
         );
 

@@ -24,9 +24,9 @@ class FirebaseHelper {
   ) async {
     try {
       await FirebaseFirestore.instance.collection('user_data').doc(userId).set({
-        'user_email': email,
         'full_name': fullName,
         'username': username,
+        'user_email': email,
         'user_gender': gender
       });
     } catch (e) {
