@@ -88,6 +88,7 @@ class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProvider
   void _onPointClicked(int index) {
     if (!clickedPoints[index]) {
       debugPrint('Titik $index diklik');
+      
       // Mengatur opacity ke 1.0 terlebih dahulu sebelum menghentikan animasi
       setState(() {
         opacityValues[index] = 1.0; // Mengembalikan opacity ke 1
@@ -109,7 +110,9 @@ class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProvider
         _showDescription(points[index].description);
       });
     } else {
+      // Jika titik sudah diklik sebelumnya, tidak perlu memodifikasi animasi, hanya tampilkan deskripsi
       debugPrint('Titik $index sudah diklik sebelumnya');
+      _showDescription(points[index].description); // Menampilkan deskripsi lagi
     }
   }
 
@@ -193,7 +196,7 @@ class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProvider
                                 child: Container(
                                   width: 16,
                                   height: 16,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: Colors.blue,
                                     shape: BoxShape.circle,
                                   ),
