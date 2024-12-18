@@ -11,7 +11,7 @@ class CalculatorListScreen extends StatefulWidget {
 
 class _CalculatorListScreenState extends State<CalculatorListScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredCalculator = CalculatorEntity.data;
+  List<Map<String, dynamic>> _filteredCalculator = CalculatorEntity.calculator;
   String _searchText = '';
 
   @override
@@ -32,7 +32,7 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
     setState(() {
       _searchText = _searchController.text;
 
-      _filteredCalculator = CalculatorEntity.data
+      _filteredCalculator = CalculatorEntity.calculator
           .where((calculator) => calculator['title']!
               .toLowerCase()
               .contains(_searchController.text.toLowerCase()))
@@ -66,7 +66,7 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
                       _searchController.clear();
                       setState(() {
                         _searchText = '';
-                        _filteredCalculator = CalculatorEntity.data;
+                        _filteredCalculator = CalculatorEntity.calculator;
                       });
                     }
                   },
@@ -75,7 +75,7 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
               onChanged: (value) {
                 setState(() {
                   _searchText = value;
-                  _filteredCalculator = CalculatorEntity.data
+                  _filteredCalculator = CalculatorEntity.calculator
                       .where((calculator) => calculator['title']!
                           .toLowerCase()
                           .contains(value.toLowerCase()))

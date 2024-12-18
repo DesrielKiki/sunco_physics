@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CalculatorEntity {
-  static List<Map<String, dynamic>> data = [
+  /// List of calculator data
+
+  static List<Map<String, dynamic>> calculator = [
     {
       'title': 'Energi Potensial',
       'icon': Icons.energy_savings_leaf,
-      'route': '/potential_energy',
+      'route': '/potential_energy_calculator',
     },
     {
       'title': 'Gaya Gesek',
@@ -31,6 +33,15 @@ class CalculatorEntity {
       'title': 'Listrik',
       'icon': Icons.sync,
       'route': '/circular_motion',
+    },
+  ];
+
+  ///list of Lesson data
+  static List<Map<String, dynamic>> lesson = [
+    {
+      'title': 'Usaha',
+      'icon': Icons.work,
+      'route': '/work_lesson',
     },
   ];
 }
