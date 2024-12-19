@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/data/model/interactive_point.dart';
+import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/vertical_line_painter.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 import 'package:sunco_physics/presentation/component/lesson_dialog.dart';
@@ -11,23 +12,29 @@ class WorkLessonScreen extends StatefulWidget {
   State<WorkLessonScreen> createState() => _WorkLessonScreenState();
 }
 
-class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProviderStateMixin {
+class _WorkLessonScreenState extends State<WorkLessonScreen>
+    with TickerProviderStateMixin {
   final List<InteractivePoint> points = [
     InteractivePoint(
-      position: const Offset(45, 210),
+      position: const Offset(35, 210),
       lineLength: 60,
+      title: "Massa",
       description:
-          "Kotak A: Benda ini awalnya dalam posisi diam sebelum gaya diberikan.",
+          'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',
+    ),
+    InteractivePoint(
+      position: const Offset(80, 235),
+      lineLength: 35,
+      title: "Gaya gesek",
+      description:
+          'Gaya gesek adalah resistensi yang terjadi saat dua permukaan saling bersentuhan. Gaya gesek terdiri dari dua jenis, yaitu gaya gesek statis dan gaya gesek kinetis. Gaya gesek statis adalah gaya gesek yang terjadi saat benda diam, sedangkan gaya gesek kinetis adalah gaya gesek yang terjadi pada benda yang bergerak',
     ),
     InteractivePoint(
       position: const Offset(190, 135),
       lineLength: 135,
-      description: "Gaya: Ini adalah arah gaya yang bekerja pada benda.",
-    ),
-    InteractivePoint(
-      position: const Offset(75, 237),
-      lineLength: 33,
-      description: "Kotak B: Posisi akhir benda setelah mengalami usaha.",
+      title: "Gaya",
+      description:
+          'gaya adalah dorongan atau tarikan yang dapat membuat suatu benda bergerak, berubah arah, berhenti, atau berubah bentuk. Contohnya: Ketika kamu mendorong meja, itu adalah gaya dorong. Ketika kamu menarik pintu, itu adalah gaya tarik. Gaya diukur dalam satuan Newton (N)',
     ),
   ];
 
@@ -76,43 +83,36 @@ class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProvider
   }
 
   // Fungsi untuk menampilkan deskripsi titik
-  void _showDescription(String description) {
+  void _showDescription(String description, String title) {
     debugPrint("Menampilkan deskripsi: $description");
     showDialog(
       context: context,
-      builder: (context) => LessonDialog(description: description),
+      builder: (context) => LessonDialog(
+        description: description,
+        title: title,
+      ),
     );
   }
 
   // Fungsi untuk menangani klik pada titik
   void _onPointClicked(int index) {
     if (!clickedPoints[index]) {
-      debugPrint('Titik $index diklik');
-      
-      // Mengatur opacity ke 1.0 terlebih dahulu sebelum menghentikan animasi
+      // Atur opacity ke 1.0 dan tandai titik sebagai telah diklik
       setState(() {
-        opacityValues[index] = 1.0; // Mengembalikan opacity ke 1
-        clickedPoints[index] = true; // Menandai bahwa titik sudah diklik
+        opacityValues[index] = 1.0; // Set opacity penuh
+        clickedPoints[index] = true; // Tandai titik sebagai diklik
       });
 
-      // Debugging: Status setelah opacity diatur
-      debugPrint('Opacity setelah diklik untuk titik $index: ${opacityValues[index]}');
-
-      // Memberikan sedikit delay sebelum animasi dihentikan dan deskripsi ditampilkan
+      // Memberikan sedikit delay sebelum menghentikan animasi dan menampilkan deskripsi
       Future.delayed(const Duration(milliseconds: 300), () {
         // Hentikan animasi pada titik yang diklik
         _animationControllers[index].stop();
 
-        // Debugging: Menampilkan status setelah animasi dihentikan
-        debugPrint('Animasi dihentikan untuk titik $index');
-        
-        // Menampilkan deskripsi titik setelah animasi dihentikan
-        _showDescription(points[index].description);
+        // Tampilkan deskripsi titik setelah animasi dihentikan
+        _showDescription(points[index].description, points[index].title);
       });
     } else {
-      // Jika titik sudah diklik sebelumnya, tidak perlu memodifikasi animasi, hanya tampilkan deskripsi
-      debugPrint('Titik $index sudah diklik sebelumnya');
-      _showDescription(points[index].description); // Menampilkan deskripsi lagi
+      _showDescription(points[index].description, points[index].title);
     }
   }
 
@@ -126,103 +126,157 @@ class _WorkLessonScreenState extends State<WorkLessonScreen> with TickerProvider
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Apa Itu Usaha?\n\nUsaha (W) adalah energi yang disalurkan gaya ke suatu benda sehingga benda tersebut bergerak.\n\nRumus usaha dapat dituliskan sebagai berikut:",
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                "Apa Itu Usaha?\n\nUsaha (W) adalah energi yang disalurkan gaya kepada suatu benda sehingga benda tersbut bergerak. Satuan usaha ialah Joule. Satuan ini didefinisikan sebagai besarnya energi yang diperlukan untuk memberi gaya sebesar satu Newton dengan jarak sejauh satu meter.",
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.justify,
               ),
-            ),
-            const Center(
-              child: Text(
-                "W = F x s x cos(θ)",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: Stack(
-                children: [
-                  Image.asset(
-                    'assets/lesson/work/usaha_1.png',
-                    width: 400,
-                    height: 300,
-                    fit: BoxFit.contain,
-                  ),
-
-                  // Menggambar garis dengan animasi kedip
-                  Positioned.fill(
-                    child: AnimatedBuilder(
-                      animation: Listenable.merge(_animationControllers),
-                      builder: (context, child) {
-                        return CustomPaint(
-                          painter: VerticalLinePainter(
-                            points: points,
-                            opacityValues: _opacityAnimations
-                                .map((anim) => anim.value)
-                                .toList(),
-                          ),
-                        );
-                      },
+              const SizedBox(height: 16),
+              Center(
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      'assets/lesson/work/usaha_1.png',
+                      width: 400,
+                      height: 300,
+                      fit: BoxFit.contain,
                     ),
-                  ),
+                    // Menggambar garis dengan animasi kedip
+                    Positioned.fill(
+                      child: AnimatedBuilder(
+                        animation: Listenable.merge(_animationControllers),
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: VerticalLinePainter(
+                              points: points,
+                              opacityValues: _opacityAnimations
+                                  .map((anim) => anim.value)
+                                  .toList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
 
-                  // Menambahkan titik interaktif dengan animasi kedip
-                  ...points
-                      .asMap()
-                      .map((index, point) {
-                        final Offset endPosition = Offset(
-                          point.position.dx,
-                          point.position.dy + point.lineLength,
-                        );
+                    // Menambahkan titik interaktif dengan animasi kedip
+                    ...points
+                        .asMap()
+                        .map((index, point) {
+                          final Offset endPosition = Offset(
+                            point.position.dx,
+                            point.position.dy + point.lineLength,
+                          );
 
-                        return MapEntry(
-                          index,
-                          Positioned(
-                            left: endPosition.dx - 8,
-                            top: endPosition.dy - 8,
-                            child: FadeTransition(
-                              opacity: _opacityAnimations[index],
-                              child: GestureDetector(
-                                onTap: () {
-                                  _onPointClicked(index); // Fungsi untuk menangani klik
-                                },
-                                child: Container(
-                                  width: 16,
-                                  height: 16,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    shape: BoxShape.circle,
+                          return MapEntry(
+                            index,
+                            Positioned(
+                              left: endPosition.dx - 10,
+                              top: endPosition.dy - 0,
+                              child: FadeTransition(
+                                opacity: _opacityAnimations[index],
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _onPointClicked(
+                                        index); // Fungsi untuk menangani klik
+                                  },
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.blue,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      })
-                      .values
-                      .toList(),
-                ],
+                          );
+                        })
+                        .values
+                        .toList(),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Contoh Soal Usaha:\n\n1. Sebuah benda didorong sejauh 5 meter dengan gaya sebesar 10 N. Berapa usaha yang dilakukan jika arah gaya sejajar dengan perpindahan?",
-                style: TextStyle(fontSize: 16),
+              const SizedBox(height: 16),
+              const Text(
+                "Untuk menghitung usaha, dapat digunakan rumus berikut:",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.justify,
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              const Center(
+                child: Text(
+                  "W = F × s",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              const Text(
+                "Jika gaya yang diberikan membentuk sudut, maka dapat digunakan rumus berikut:",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+              const SizedBox(height: 16),
+              const Center(
+                child: Text(
+                  "W = F × s × cos(θ)",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              const Text(
+                "Jika gaya yang diberikan kepada benda lebih dari satu, maka cukup hitung usaha untuk setiap gaya lalu jumlahkan usaha tersebut.",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.justify,
+              ),
+              const SizedBox(height: 16),
+              const Align(
+                alignment: Alignment.centerLeft, // Pastikan teks rata kiri
+                child: Text(
+                  "Contoh soal usaha : ",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign
+                      .start, // Tidak wajib, karena alignment sudah diatur
+                ),
+              ),
+              const SizedBox(height: 16),
+              const QuestionButton(
+                title: "Soal 1",
+                question:
+                    "Sebuah benda didorong oleh dua orang sejauh 5 meter. "
+                    "Orang yang pertama mendorong benda dengan gaya 50 Newton, sedangkan orang yang kedua mendorong dengan gaya 100 Newton. "
+                    "Berapa usahanya?",
+                answer: "1. W1 = 50 Newton × 5 meter = 250 Joule\n"
+                    "2. W2 = 100 Newton × 5 meter = 500 Joule\n"
+                    "3. Wtotal = 250 Joule + 500 Joule = 750 Joule\n"
+                    "Sehingga usaha untuk mendorong benda tersebut adalah 750 Joule.",
+              ),
+              const SizedBox(height: 16),
+              const QuestionButton(
+                title: "Soal 2",
+                question:
+                    "Sebuah benda ditarik dengan arah 45 derajat dan gaya sebesar 100 Newton sejauh 2 meter. Berapa usahanya?",
+                answer: "W = 100 Newton × 2 meter × cos(45) = 141 Joule\n"
+                    "Sehingga usaha untuk menarik benda tersebut adalah 141 Joule.",
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
