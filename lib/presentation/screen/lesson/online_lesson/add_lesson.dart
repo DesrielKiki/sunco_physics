@@ -14,6 +14,7 @@ class AddLessonPage extends StatefulWidget {
 class _AddLessonPageState extends State<AddLessonPage> {
   final List<Map<String, dynamic>> _lessonContent = [];
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _titleTextController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
   void _addTextContent() {
@@ -99,16 +100,19 @@ class _AddLessonPageState extends State<AddLessonPage> {
   }
 
   Future<void> _saveLesson() async {
-    await FirebaseFirestore.instance.collection('lessons').add({
+    final lessonId = FirebaseFirestore.instance.collection('lessons').doc().id;
+    await FirebaseFirestore.instance.collection('lessons').doc(lessonId).set({
+      'title': _titleTextController.text,
       'content': _lessonContent,
       'createdAt': DateTime.now(),
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Lesson saved successfully!')),
-    );
-    setState(() {
-      _lessonContent.clear();
-    });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lesson saved successfully!')),
+      );
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -121,6 +125,16 @@ class _AddLessonPageState extends State<AddLessonPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            TextField(
+              controller: _titleTextController,
+              decoration: InputDecoration(
+                labelText: 'Add title',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: _addTextContent,
+                ),
+              ),
+            ),
             TextField(
               controller: _textController,
               decoration: InputDecoration(

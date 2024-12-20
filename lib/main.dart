@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/navigation/app_routes.dart';
-import 'package:sunco_physics/presentation/screen/lesson/admin/add_lesson.dart';
-import 'package:sunco_physics/presentation/screen/lesson/list/work_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/online_lesson/add_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/work_lesson.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   const MyApp({
     super.key,
   });
+
 
   @override
   Widget build(
