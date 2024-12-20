@@ -19,10 +19,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   String? _gender;
   bool _isLoading = true;
+  String? _errorMessage;
+
+  Future<bool> _verifyPassword(String password) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || user.email == null) return false;
+
+    try {
+      final credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      // Reauthenticate user to verify password
+      await user.reauthenticateWithCredential(credential);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   Future<void> _saveChanges() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      if (_passwordController.text.isEmpty) {
+        setState(() {
+          _errorMessage = "Password harus diisi.";
+        });
+        return;
+      }
+
+      final isPasswordValid = await _verifyPassword(_passwordController.text);
+      if (!isPasswordValid) {
+        setState(() {
+          _errorMessage = "Password salah. Harap masukkan password yang benar.";
+        });
+        return;
+      }
+
       try {
         await FirebaseFirestore.instance
             .collection('user_data')
@@ -32,6 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           'username': _usernameController.text,
           'user_email': _emailController.text,
         });
+
         if (mounted) {
           Navigator.pop(context, true);
         }
@@ -139,19 +174,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     AuthTextField(
                       label: "Masukkan Password",
                       hintText: "",
-                      icon: Icons.person,
+                      icon: Icons.lock,
                       obscureText: true,
                       controller: _passwordController,
                     ),
+                    if (_errorMessage != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                          child: Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
                     const SizedBox(
                       height: 24,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: ElevatedButton(
-                        onPressed: () {
-                          _saveChanges();
-                        },
+                        onPressed: _saveChanges,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,

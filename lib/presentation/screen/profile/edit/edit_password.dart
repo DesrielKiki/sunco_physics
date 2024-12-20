@@ -20,6 +20,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
   String? _fullName;
   String? _email;
   String? _gender;
+  String? _errorMessage;
 
   bool _isLoading = false;
 
@@ -52,20 +53,28 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
     String newPassword = _newPasswordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
-    // Validasi input
+    setState(() {
+      _errorMessage = null; // Reset error message
+    });
+
     if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      _showErrorDialog("Semua kolom harus diisi.");
+      setState(() {
+        _errorMessage = "Semua kolom harus diisi.";
+      });
       return;
     }
 
     if (newPassword != confirmPassword) {
-      _showErrorDialog("Password baru dan konfirmasi password tidak cocok.");
+      setState(() {
+        _errorMessage = "Password baru dan konfirmasi password tidak cocok.";
+      });
       return;
     }
 
     if (newPassword.length < 6) {
-      // Minimum 6 karakter untuk password baru
-      _showErrorDialog("Password baru harus lebih dari 6 karakter.");
+      setState(() {
+        _errorMessage = "Password baru harus lebih dari 6 karakter.";
+      });
       return;
     }
 
@@ -74,22 +83,25 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
         _isLoading = true;
       });
 
-      // Re-authenticate user dengan password lama
       AuthCredential credential = EmailAuthProvider.credential(
         email: user!.email!,
         password: oldPassword,
       );
 
       await user.reauthenticateWithCredential(credential);
-
-      // Jika re-authenticate berhasil, update password
       await user.updatePassword(newPassword);
 
       setState(() {
         _isLoading = false;
+        _errorMessage = null; // Clear error message on success
       });
 
-      _showSuccessDialog("Password berhasil diperbarui.");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Password berhasil diperbarui.")),
+        );
+        Navigator.pop(context, true);
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -97,56 +109,20 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
 
       if (e is FirebaseAuthException) {
         if (e.code == 'wrong-password') {
-          _showErrorDialog("Password lama yang Anda masukkan salah.");
+          setState(() {
+            _errorMessage = "Password lama yang Anda masukkan salah.";
+          });
         } else {
-          _showErrorDialog(
-              "Terjadi kesalahan saat memperbarui password: ${e.message}");
+          setState(() {
+            _errorMessage = "Password lama yang Anda masukkan salah.";
+          });
         }
       } else {
-        _showErrorDialog("Terjadi kesalahan yang tidak terduga.");
+        setState(() {
+          _errorMessage = "Terjadi kesalahan yang tidak terduga.";
+        });
       }
     }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Success"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context, true); // Kembali ke halaman sebelumnya
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -236,8 +212,23 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                       controller: _confirmPasswordController,
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 16,
                     ),
+                    if (_errorMessage != null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16, left: 8),  
+                          child: Text(
+                            _errorMessage!,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: ElevatedButton(
