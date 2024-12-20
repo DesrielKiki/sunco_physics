@@ -20,12 +20,11 @@ class LessonDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             decoration: const BoxDecoration(
-              color: ColorConfig.primaryColor, // Sesuaikan warna header
+              color: ColorConfig.primaryColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16.0),
                 topRight: Radius.circular(16.0),
@@ -42,7 +41,6 @@ class LessonDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          // Content
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
@@ -52,7 +50,6 @@ class LessonDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          // Close Button
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(

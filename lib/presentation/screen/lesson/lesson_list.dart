@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/data/model/calculator_data.dart';
+import 'package:sunco_physics/data/model/application_entity.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class LessonListScreen extends StatefulWidget {
@@ -11,13 +12,30 @@ class LessonListScreen extends StatefulWidget {
 
 class _LessonListScreenState extends State<LessonListScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredLessons = CalculatorEntity.lesson;
+  List<Map<String, dynamic>> _filteredLessons = ApplicationEntity.lesson;
   String _searchText = '';
+  bool isAdmin = false;
+
+  void _checkAdminStatus() async {
+    User? user = FirebaseAuth
+        .instance.currentUser; // Dapatkan pengguna yang sedang login
+    if (user != null && user.email == 'admin@gmail.com') {
+      setState(() {
+        isAdmin =
+            true; // Jika email pengguna adalah admin, set isAdmin menjadi true
+      });
+    } else {
+      setState(() {
+        isAdmin = false; // Jika bukan admin, set isAdmin menjadi false
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    _checkAdminStatus();
   }
 
   @override
@@ -31,7 +49,7 @@ class _LessonListScreenState extends State<LessonListScreen> {
     setState(() {
       _searchText = _searchController.text;
 
-      _filteredLessons = CalculatorEntity.lesson
+      _filteredLessons = ApplicationEntity.lesson
           .where((lesson) => lesson['title']!
               .toLowerCase()
               .contains(_searchController.text.toLowerCase()))
@@ -47,42 +65,56 @@ class _LessonListScreenState extends State<LessonListScreen> {
         title: const Text('Material Physics'),
         foregroundColor: ColorConfig.onPrimaryColor,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search Material',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _searchText.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() {
-                            _filteredLessons = CalculatorEntity.lesson;
-                          });
-                        },
-                      )
-                    : null,
-                filled: true,
-                fillColor: Colors.grey.shade200,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
+      floatingActionButton: isAdmin
+          ? FloatingActionButton(
+              onPressed: () {
+                // Tindakan untuk menambahkan materi
+                // Misalnya pindah ke halaman untuk menambah materi baru
+                Navigator.pushNamed(context, '/addLesson');
+              },
+              backgroundColor: ColorConfig.primaryColor,
+              child: const Icon(Icons.add),
+            )
+          : null, // Tidak tampil jika bukan admin
+
+      body: Center(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search Material',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchText.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {
+                              _filteredLessons = ApplicationEntity.lesson;
+                            });
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: Colors.grey.shade200,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: LessonGrid(filteredLessons: _filteredLessons),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: LessonGrid(filteredLessons: _filteredLessons),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -119,8 +151,8 @@ class LessonGrid extends StatelessWidget {
         : GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+              crossAxisSpacing: 1,
+              mainAxisSpacing: 1,
               childAspectRatio: 1,
             ),
             itemCount: filteredLessons.length,
@@ -130,27 +162,38 @@ class LessonGrid extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, lesson['route'] as String);
                 },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: ColorConfig.gradientBrandReverse,
-                  ),
+                child: Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        lesson['icon'] as IconData,
-                        size: 64,
-                        color: Colors.white,
+                      SizedBox(
+                        width: 136,
+                        height: 136,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: ColorConfig.gradientBrandReverse,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                lesson['icon'] as IconData,
+                                size: 64,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 6),
+                            ],
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         lesson['title'] as String,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: ColorConfig.black,
                         ),
                       ),
                     ],

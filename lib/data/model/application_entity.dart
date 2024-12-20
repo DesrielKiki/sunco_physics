@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CalculatorEntity {
+class ApplicationEntity {
   /// List of calculator data
 
   static List<Map<String, dynamic>> calculator = [
@@ -42,6 +42,41 @@ class CalculatorEntity {
       'title': 'Usaha',
       'icon': Icons.work,
       'route': '/work_lesson',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
+    },
+    {
+      'title': 'dummy',
+      'icon': Icons.disabled_by_default,
+      'route': '/default',
     },
   ];
 }

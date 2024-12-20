@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
+import 'package:sunco_physics/presentation/screen/lesson/admin/add_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/lesson_list.dart';
 import 'package:sunco_physics/presentation/screen/lesson/list/work_lesson.dart';
 import 'package:sunco_physics/presentation/screen/profile/edit/edit_password.dart';
@@ -17,6 +18,7 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String editProfile = '/edit_profile';
   static const String editPassword = '/edit_password';
+  static const String addLesson = '/addLesson';
 
   /// Calculator List Route
 
@@ -50,7 +52,10 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const EditPasswordScreen(),
         );
-
+      case addLesson:
+        return MaterialPageRoute(
+          builder: (_) => const AddLessonPage(),
+        );
       /**
        * Calculator List Route
        */
