@@ -11,14 +11,13 @@ class LessonListScreen extends StatefulWidget {
 
 class _LessonListScreenState extends State<LessonListScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredCalculator = CalculatorEntity.lesson;
+  List<Map<String, dynamic>> _filteredLessons = CalculatorEntity.lesson;
   String _searchText = '';
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    _searchController.text = '';
   }
 
   @override
@@ -32,8 +31,8 @@ class _LessonListScreenState extends State<LessonListScreen> {
     setState(() {
       _searchText = _searchController.text;
 
-      _filteredCalculator = CalculatorEntity.lesson
-          .where((calculator) => calculator['title']!
+      _filteredLessons = CalculatorEntity.lesson
+          .where((lesson) => lesson['title']!
               .toLowerCase()
               .contains(_searchController.text.toLowerCase()))
           .toList();
@@ -45,53 +44,42 @@ class _LessonListScreenState extends State<LessonListScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConfig.primaryColor,
+        title: const Text('Material Physics'),
         foregroundColor: ColorConfig.onPrimaryColor,
-        title: const Text('Physics Calculators'),
       ),
       body: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-            child: SearchBar(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: TextField(
               controller: _searchController,
-              hintText: 'Search Calculator',
-              trailing: [
-                IconButton(
-                  icon: _searchText.isEmpty
-                      ? const Icon(Icons.search)
-                      : const Icon(Icons.close),
-                  onPressed: () {
-                    if (_searchText.isNotEmpty) {
-                      _searchController.clear();
-                      setState(() {
-                        _searchText = '';
-                        _filteredCalculator = CalculatorEntity.lesson;
-                      });
-                    }
-                  },
+              decoration: InputDecoration(
+                hintText: 'Search Material',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchText.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _filteredLessons = CalculatorEntity.lesson;
+                          });
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.grey.shade200,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
                 ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _searchText = value;
-                  _filteredCalculator = CalculatorEntity.lesson
-                      .where((calculator) => calculator['title']!
-                          .toLowerCase()
-                          .contains(value.toLowerCase()))
-                      .toList();
-                });
-              },
-              padding: WidgetStateProperty.all(
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               ),
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  CalculatorGridItem(filteredCalculator: _filteredCalculator),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: LessonGrid(filteredLessons: _filteredLessons),
             ),
           ),
         ],
@@ -100,69 +88,70 @@ class _LessonListScreenState extends State<LessonListScreen> {
   }
 }
 
-class CalculatorGridItem extends StatelessWidget {
-  const CalculatorGridItem({
+class LessonGrid extends StatelessWidget {
+  const LessonGrid({
     super.key,
-    required this.filteredCalculator,
+    required this.filteredLessons,
   });
 
-  final List<Map<String, dynamic>> filteredCalculator;
+  final List<Map<String, dynamic>> filteredLessons;
 
   @override
   Widget build(BuildContext context) {
-    return filteredCalculator.isEmpty
+    return filteredLessons.isEmpty
         ? Center(
             child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/ic_notfound.png',
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Kalkulator Tidak Di temukan",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/ic_notfound.png', height: 120),
+                const SizedBox(height: 16),
+                const Text(
+                  "Material Not Found",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
-          ))
+              ],
+            ),
+          )
         : GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
               childAspectRatio: 1,
             ),
-            itemCount: filteredCalculator.length,
+            itemCount: filteredLessons.length,
             itemBuilder: (context, index) {
-              final calculator = filteredCalculator[index];
+              final lesson = filteredLessons[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, calculator['route'] as String);
+                  Navigator.pushNamed(context, lesson['route'] as String);
                 },
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: ColorConfig.gradientBrandReverse,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        calculator['icon'] as IconData,
-                        size: 40,
-                        color: Theme.of(context).primaryColor,
+                        lesson['icon'] as IconData,
+                        size: 64,
+                        color: Colors.white,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        calculator['title'] as String,
+                        lesson['title'] as String,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),

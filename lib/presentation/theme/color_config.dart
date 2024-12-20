@@ -15,4 +15,8 @@ class ColorConfig {
     darkBlue,
     softCyan,
   ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
+  static const LinearGradient gradientBrandReverse = LinearGradient(colors: [
+    softCyan,
+    darkBlue,
+  ], begin: Alignment.topCenter, end: Alignment.bottomCenter);
 }
