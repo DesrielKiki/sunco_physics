@@ -4,13 +4,19 @@ import 'package:sunco_physics/presentation/theme/color_config.dart';
 class QuestionButton extends StatelessWidget {
   final String title;
   final String question;
+  final String known;
+  final String asked;
   final String answer;
+  final String conclusion;
 
   const QuestionButton({
     super.key,
     required this.title,
     required this.question,
     required this.answer,
+    required this.known,
+    required this.asked,
+    required this.conclusion,
   });
 
   @override
@@ -24,32 +30,54 @@ class QuestionButton extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
+        ListTile(
+          title: Text(
             question,
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.justify,
+            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
           ),
         ),
-        const SizedBox(height: 16),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            "Jawab:",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        const ListTile(
+          title: Text(
+            "Diketahui :",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
+        ListTile(
+          title: Text(
+            known,
+            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+          ),
+        ),
+        const ListTile(
+          title: Text(
+            "Ditanya :",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListTile(
+          title: Text(
+            asked,
+            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+          ),
+        ),
+        const ListTile(
+          title: Text(
+            "Jawaban :",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        ListTile(
+          title: Text(
             answer,
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.justify,
+            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
           ),
         ),
-        const SizedBox(height: 16),
+        ListTile(
+          title: Text(
+            conclusion,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
       ],
     );
   }

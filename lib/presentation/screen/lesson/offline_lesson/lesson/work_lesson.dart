@@ -48,19 +48,16 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
     super.initState();
 
     clickedPoints = List.generate(points.length, (_) => false);
-    opacityValues =
-        List.generate(points.length, (_) => 1.0); // Mulai dengan opacity penuh
+    opacityValues = List.generate(points.length, (_) => 1.0);
 
-    // Inisialisasi AnimationController untuk setiap titik
     _animationControllers = List.generate(
       points.length,
       (_) => AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
-      )..repeat(reverse: true), // Ulangi animasi dengan efek reverse
+      )..repeat(reverse: true),
     );
 
-    // Membuat animasi kedip (opacity)
     _opacityAnimations = _animationControllers
         .map(
           (controller) => Tween<double>(begin: 1.0, end: 0.5).animate(
@@ -69,20 +66,17 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
         )
         .toList();
 
-    // Debugging: Menampilkan status awal
     debugPrint('Initial opacityValues: $opacityValues');
   }
 
   @override
   void dispose() {
-    // Menyelesaikan controller animasi ketika tidak digunakan lagi
     for (var controller in _animationControllers) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  // Fungsi untuk menampilkan deskripsi titik
   void _showDescription(String description, String title) {
     debugPrint("Menampilkan deskripsi: $description");
     showDialog(
@@ -94,21 +88,16 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
     );
   }
 
-  // Fungsi untuk menangani klik pada titik
   void _onPointClicked(int index) {
     if (!clickedPoints[index]) {
-      // Atur opacity ke 1.0 dan tandai titik sebagai telah diklik
       setState(() {
-        opacityValues[index] = 1.0; // Set opacity penuh
-        clickedPoints[index] = true; // Tandai titik sebagai diklik
+        opacityValues[index] = 1.0;
+        clickedPoints[index] = true;
       });
 
-      // Memberikan sedikit delay sebelum menghentikan animasi dan menampilkan deskripsi
       Future.delayed(const Duration(milliseconds: 300), () {
-        // Hentikan animasi pada titik yang diklik
         _animationControllers[index].stop();
 
-        // Tampilkan deskripsi titik setelah animasi dihentikan
         _showDescription(points[index].description, points[index].title);
       });
     } else {
@@ -145,7 +134,6 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                       height: 300,
                       fit: BoxFit.contain,
                     ),
-                    // Menggambar garis dengan animasi kedip
                     Positioned.fill(
                       child: AnimatedBuilder(
                         animation: Listenable.merge(_animationControllers),
@@ -161,8 +149,6 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                         },
                       ),
                     ),
-
-                    // Menambahkan titik interaktif dengan animasi kedip
                     ...points
                         .asMap()
                         .map((index, point) {
@@ -180,8 +166,7 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                                 opacity: _opacityAnimations[index],
                                 child: GestureDetector(
                                   onTap: () {
-                                    _onPointClicked(
-                                        index); // Fungsi untuk menangani klik
+                                    _onPointClicked(index);
                                   },
                                   child: Container(
                                     width: 20,
@@ -245,32 +230,36 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
               ),
               const SizedBox(height: 16),
               const Align(
-                alignment: Alignment.centerLeft, // Pastikan teks rata kiri
+                alignment: Alignment.centerLeft,
                 child: Text(
                   "Contoh soal usaha : ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign
-                      .start, // Tidak wajib, karena alignment sudah diatur
+                  textAlign: TextAlign.start,
                 ),
               ),
               const SizedBox(height: 16),
               const QuestionButton(
                 title: "Soal 1",
                 question:
-                    "Sebuah benda didorong oleh dua orang sejauh 5 meter. "
-                    "Orang yang pertama mendorong benda dengan gaya 50 Newton, sedangkan orang yang kedua mendorong dengan gaya 100 Newton. "
-                    "Berapa usahanya?",
-                answer: "1. W1 = 50 Newton × 5 meter = 250 Joule\n"
-                    "2. W2 = 100 Newton × 5 meter = 500 Joule\n"
-                    "3. Wtotal = 250 Joule + 500 Joule = 750 Joule\n"
-                    "Sehingga usaha untuk mendorong benda tersebut adalah 750 Joule.",
+                    "Sebuah benda didorong oleh dua orang sejauh 5 meter. Orang yang pertama mendorong benda dengan gaya 50 Newton, sedangkan orang yang kedua mendorong dengan gaya 100 Newton. Berapa usahanya?",
+                known: "F1 = 50 newton\nF2 = 100 NEWTON\nS = 5 METER",
+                asked: "Wtotal = ... ? ",
+                answer:
+                    "W1 = 50 Newton × 5 meter = 250 Joule\nW2 = 100 Newton × 5 meter = 500 Joule\nWtotal = 250 Joule + 500 Joule = 750 Joule.",
+                conclusion:
+                    "Sehingga usaha untuk mendorong benda tersebut adalah 750 Joule",
               ),
               const SizedBox(height: 16),
               const QuestionButton(
                 title: "Soal 2",
                 question:
                     "Sebuah benda ditarik dengan arah 45 derajat dan gaya sebesar 100 Newton sejauh 2 meter. Berapa usahanya?",
-                answer: "W = 100 Newton × 2 meter × cos(45) = 141 Joule\n"
+                known:
+                    "F = 100 Newton\nS = 2 METER\n sudut gaya(θ) = 45 DERAJAT",
+                asked: "W = ... ?",
+                answer:
+                    "W = FxSxcos(θ)\nW = 100 Newton × 2 meter × cos(45) = 141 Joule\n",
+                conclusion:
                     "Sehingga usaha untuk menarik benda tersebut adalah 141 Joule.",
               ),
             ],

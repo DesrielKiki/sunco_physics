@@ -4,7 +4,7 @@ import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dar
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/screen/lesson/online_lesson/add_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson_list.dart';
-import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/work_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/work_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/online_lesson/online_lesson_list.dart';
 import 'package:sunco_physics/presentation/screen/profile/edit/edit_password.dart';
 import 'package:sunco_physics/presentation/screen/profile/edit/edit_profile.dart';
