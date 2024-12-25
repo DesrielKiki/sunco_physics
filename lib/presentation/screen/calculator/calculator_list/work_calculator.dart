@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class PotentialEnergyCalculatorScreen extends StatefulWidget {
-  const PotentialEnergyCalculatorScreen({super.key});
+class WorkCalculatorScreen extends StatefulWidget {
+  const WorkCalculatorScreen({super.key});
 
   @override
-  State<PotentialEnergyCalculatorScreen> createState() =>
-      _PotentialEnergyCalculatorScreenState();
+  State<WorkCalculatorScreen> createState() => _WorkCalculatorScreenState();
 }
 
-class _PotentialEnergyCalculatorScreenState
-    extends State<PotentialEnergyCalculatorScreen>
+class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
     with TickerProviderStateMixin {
-  final TextEditingController _massaController = TextEditingController();
-  final TextEditingController _ketinggianController = TextEditingController();
+  final TextEditingController _forceController = TextEditingController();
+  final TextEditingController _distanceController = TextEditingController();
+  final TextEditingController _angleController = TextEditingController();
   String _result = '';
 
   late AnimationController _animationController;
@@ -23,21 +22,24 @@ class _PotentialEnergyCalculatorScreenState
 
   void _resetFields() {
     setState(() {
-      _massaController.clear();
-      _ketinggianController.clear();
+      _forceController.clear();
+      _distanceController.clear();
+      _angleController.clear();
       _result = '';
     });
   }
 
-  void _calculateEnergy() {
-    final double? massa = double.tryParse(_massaController.text);
-    final double? ketinggian = double.tryParse(_ketinggianController.text);
-    const double gravitasi = 9.8;
+  void _calculateWork() {
+    final double? force = double.tryParse(_forceController.text);
+    final double? distance = double.tryParse(_distanceController.text);
+    final double? angle = double.tryParse(_angleController.text);
 
-    if (massa != null && ketinggian != null) {
-      final double energiPotensial = massa * gravitasi * ketinggian;
+    if (force != null && distance != null && angle != null) {
+      final double angleInRadians =
+          angle * (3.14159 / 180); // Convert to radians
+      final double work = force * distance * angleInRadians.abs();
       setState(() {
-        _result = 'Energi Potensial: $energiPotensial Joule';
+        _result = 'Usaha: ${work.toStringAsFixed(2)} Joule';
       });
     } else {
       setState(() {
@@ -84,7 +86,7 @@ class _PotentialEnergyCalculatorScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Navigasi kembali ke layar sebelumnya
+            Navigator.pop(context);
           },
         ),
         title: Column(
@@ -105,7 +107,7 @@ class _PotentialEnergyCalculatorScreenState
             FadeTransition(
               opacity: _opacityAnimation,
               child: const Text(
-                'Energi Potensial',
+                'Usaha',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -154,16 +156,6 @@ class _PotentialEnergyCalculatorScreenState
                           width: double.infinity,
                           height: 45,
                           color: ColorConfig.darkBlue,
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).padding.top,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     );
@@ -178,24 +170,21 @@ class _PotentialEnergyCalculatorScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildInputField(
-                    label: 'Massa (m) :',
-                    controller: _massaController,
-                    hint: 'Masukkan angka',
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Percepatan Gravitasi (g) :',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const Text(
-                    '9.8 m/s²',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    label: 'Gaya (F) :',
+                    controller: _forceController,
+                    hint: 'Masukkan angka (N)',
                   ),
                   const SizedBox(height: 10),
                   _buildInputField(
-                    label: 'Ketinggian (h) :',
-                    controller: _ketinggianController,
-                    hint: 'Masukkan angka',
+                    label: 'Jarak (s) :',
+                    controller: _distanceController,
+                    hint: 'Masukkan angka (m)',
+                  ),
+                  const SizedBox(height: 10),
+                  _buildInputField(
+                    label: 'Sudut (θ) :',
+                    controller: _angleController,
+                    hint: 'Masukkan angka (°)',
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -227,7 +216,7 @@ class _PotentialEnergyCalculatorScreenState
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: _calculateEnergy,
+                        onPressed: _calculateWork,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ColorConfig.darkBlue,
                           foregroundColor: Colors.white,
@@ -264,6 +253,43 @@ class _PotentialEnergyCalculatorScreenState
                         style: const TextStyle(fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16.0),
+                    color: Colors.grey.shade300,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'W = F × s × cos(θ)',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Usaha adalah hasil kali gaya, jarak, dan kosinus sudut di antaranya.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/workLesson");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                          child: const Text('Continue reading the material'),
+                        ),
+                      ],
                     ),
                   ),
                 ],

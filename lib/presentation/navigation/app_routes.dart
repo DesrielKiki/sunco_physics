@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy_calculator.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/work_calculator.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/potential_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/online_lesson/add_lesson.dart';
@@ -26,12 +28,14 @@ class AppRoutes {
 
   static const String calculatorList = '/calculatorList';
   static const String potentialEnergyCalculator = '/potentialEnergyCalculator';
+  static const String workCalculator = '/workCalculator';
 
   /// lesson List Route
   static const String offlineLessonList = '/offlineLessonList';
   static const String onlineLessonList = '/onlineLessonList';
   static const String workLesson = '/workLesson';
   static const String potentialEnergyLesson = '/potentialEnergyLesson';
+  static const String kineticEnergyLesson = '/kineticEnergyLesson';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -71,6 +75,10 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const PotentialEnergyCalculatorScreen(),
         );
+      case workCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const WorkCalculatorScreen(),
+        );
 
       /**
        * Lesson List Route
@@ -91,6 +99,11 @@ class AppRoutes {
       case potentialEnergyLesson:
         return MaterialPageRoute(
           builder: (_) => const PotentialEnergyLessonScreen(),
+        );
+
+      case kineticEnergyLesson:
+        return MaterialPageRoute(
+          builder: (_) => const KineticEnergyLessonScreen(),
         );
 
       default:

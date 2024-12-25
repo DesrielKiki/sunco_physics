@@ -9,6 +9,11 @@ class ApplicationEntity {
       'icon': Icons.energy_savings_leaf,
       'route': '/potentialEnergyCalculator',
     },
+    {
+      'title': 'Usaha',
+      'icon': Icons.work,
+      'route': '/workCalculator',
+    },
   ];
 
   ///list of Lesson data
@@ -22,6 +27,11 @@ class ApplicationEntity {
       'title': 'Energi Potensial',
       'icon': Icons.energy_savings_leaf,
       'route': '/potentialEnergyLesson',
+    },
+    {
+      'title': 'Energi Kinetik',
+      'icon': Icons.energy_savings_leaf,
+      'route': '/kineticEnergyLesson',
     },
     {
       'title': 'dummy',
