@@ -66,13 +66,6 @@ flutter:
   assets:
     - assets/
     - assets/lesson/
-    - assets/lesson/work/
-    - assets/lesson/work/usaha_1.png
-    - assets/logo_awal.png
-    - assets/ic_kalkulator.png
-    - assets/ic_book.png
-    - assets/ic_notfound.png
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

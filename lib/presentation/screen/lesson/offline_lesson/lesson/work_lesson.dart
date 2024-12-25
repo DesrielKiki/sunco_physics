@@ -23,8 +23,8 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
           'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',
     ),
     InteractivePoint(
-      position: const Offset(80, 235),
-      lineLength: 35,
+      position: const Offset(75, 230),
+      lineLength: 40,
       title: "Gaya gesek",
       description:
           'Gaya gesek adalah resistensi yang terjadi saat dua permukaan saling bersentuhan. Gaya gesek terdiri dari dua jenis, yaitu gaya gesek statis dan gaya gesek kinetis. Gaya gesek statis adalah gaya gesek yang terjadi saat benda diam, sedangkan gaya gesek kinetis adalah gaya gesek yang terjadi pada benda yang bergerak',
@@ -109,10 +109,9 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Materi Usaha"),
+        title: const Text("Usaha"),
         backgroundColor: ColorConfig.primaryColor,
         foregroundColor: ColorConfig.onPrimaryColor,
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,7 +128,7 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                 child: Stack(
                   children: [
                     Image.asset(
-                      'assets/lesson/work/usaha_1.png',
+                      'assets/lesson/img_work.png',
                       width: 400,
                       height: 300,
                       fit: BoxFit.contain,
@@ -149,40 +148,36 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                         },
                       ),
                     ),
-                    ...points
-                        .asMap()
-                        .map((index, point) {
-                          final Offset endPosition = Offset(
-                            point.position.dx,
-                            point.position.dy + point.lineLength,
-                          );
+                    ...points.asMap().map((index, point) {
+                      final Offset endPosition = Offset(
+                        point.position.dx,
+                        point.position.dy + point.lineLength,
+                      );
 
-                          return MapEntry(
-                            index,
-                            Positioned(
-                              left: endPosition.dx - 10,
-                              top: endPosition.dy - 0,
-                              child: FadeTransition(
-                                opacity: _opacityAnimations[index],
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _onPointClicked(index);
-                                  },
-                                  child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.blue,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
+                      return MapEntry(
+                        index,
+                        Positioned(
+                          left: endPosition.dx - 10,
+                          top: endPosition.dy - 0,
+                          child: FadeTransition(
+                            opacity: _opacityAnimations[index],
+                            child: GestureDetector(
+                              onTap: () {
+                                _onPointClicked(index);
+                              },
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
                                 ),
                               ),
                             ),
-                          );
-                        })
-                        .values
-                        .toList(),
+                          ),
+                        ),
+                      );
+                    }).values
                   ],
                 ),
               ),
@@ -258,7 +253,7 @@ class _WorkLessonScreenState extends State<WorkLessonScreen>
                     "F = 100 Newton\nS = 2 METER\n sudut gaya(θ) = 45 DERAJAT",
                 asked: "W = ... ?",
                 answer:
-                    "W = FxSxcos(θ)\nW = 100 Newton × 2 meter × cos(45) = 141 Joule\n",
+                    "W = FxSxcos(θ)\nW = 100 Newton × 2 meter × cos(45) = 141 Joule",
                 conclusion:
                     "Sehingga usaha untuk menarik benda tersebut adalah 141 Joule.",
               ),

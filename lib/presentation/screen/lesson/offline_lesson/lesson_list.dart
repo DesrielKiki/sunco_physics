@@ -137,59 +137,62 @@ class LessonGrid extends StatelessWidget {
               ],
             ),
           )
-        : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-              childAspectRatio: 1,
-            ),
-            itemCount: filteredLessons.length,
-            itemBuilder: (context, index) {
-              final lesson = filteredLessons[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, lesson['route'] as String);
-                },
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 136,
-                        height: 136,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: ColorConfig.gradientBrandReverse,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                lesson['icon'] as IconData,
-                                size: 64,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(height: 6),
-                            ],
+        : Padding(
+            padding: const EdgeInsets.only(top: 32),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+                childAspectRatio: 1,
+              ),
+              itemCount: filteredLessons.length,
+              itemBuilder: (context, index) {
+                final lesson = filteredLessons[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, lesson['route'] as String);
+                  },
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 136,
+                          height: 136,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: ColorConfig.gradientBrandReverse,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  lesson['icon'] as IconData,
+                                  size: 64,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(height: 6),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        lesson['title'] as String,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: ColorConfig.black,
+                        const SizedBox(height: 8),
+                        Text(
+                          lesson['title'] as String,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: ColorConfig.black,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
   }
 }

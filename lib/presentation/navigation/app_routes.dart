@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/potential_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/online_lesson/add_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson_list.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/work_lesson.dart';
@@ -24,13 +25,13 @@ class AppRoutes {
   /// Calculator List Route
 
   static const String calculatorList = '/calculatorList';
-  static const String potentialEnergyCalculator =
-      '/potential_energy_calculator';
+  static const String potentialEnergyCalculator = '/potentialEnergyCalculator';
 
   /// lesson List Route
   static const String offlineLessonList = '/offlineLessonList';
   static const String onlineLessonList = '/onlineLessonList';
-  static const String workLesson = '/work_lesson';
+  static const String workLesson = '/workLesson';
+  static const String potentialEnergyLesson = '/potentialEnergyLesson';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -86,6 +87,10 @@ class AppRoutes {
       case workLesson:
         return MaterialPageRoute(
           builder: (_) => const WorkLessonScreen(),
+        );
+      case potentialEnergyLesson:
+        return MaterialPageRoute(
+          builder: (_) => const PotentialEnergyLessonScreen(),
         );
 
       default:
