@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/data/helper/firebase_helper.dart';
 import 'package:sunco_physics/presentation/component/auth_textfield.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
@@ -16,10 +16,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseHelper _firebaseHelper = FirebaseHelper();
 
   String? _gender;
   bool _isLoading = true;
   String? _errorMessage;
+
+  Future<void> _loadUserData() async {
+    try {
+      final user = await _firebaseHelper.getCurrentUser();
+      if (user != null) {
+        final userDoc = await _firebaseHelper.getUserData(user.uid);
+        setState(() {
+          _fullNameController.text = userDoc['full_name'] ?? '';
+          _usernameController.text = userDoc['username'] ?? '';
+          _emailController.text = userDoc['user_email'] ?? '';
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      setState(() => _isLoading = false);
+    }
+  }
 
   Future<bool> _verifyPassword(String password) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -40,37 +58,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _saveChanges() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      if (_passwordController.text.isEmpty) {
-        setState(() {
-          _errorMessage = "Password harus diisi.";
-        });
-        return;
+    final user = await _firebaseHelper.getCurrentUser();
+    if (user == null) return;
+
+    if (_passwordController.text.isEmpty) {
+      setState(() => _errorMessage = "Password harus diisi.");
+      return;
+    }
+
+    final isPasswordValid = await _firebaseHelper.verifyPassword(
+      user.email!,
+      _passwordController.text,
+    );
+
+    if (!isPasswordValid) {
+      setState(() => _errorMessage =
+          "Password salah. Harap masukkan password yang benar.");
+      return;
+    }
+
+    try {
+      await _firebaseHelper.updateUserData(user.uid, {
+        'full_name': _fullNameController.text,
+        'username': _usernameController.text,
+        'user_email': _emailController.text,
+      });
+      if (mounted) {
+        Navigator.pop(context, true);
       }
-
-      final isPasswordValid = await _verifyPassword(_passwordController.text);
-      if (!isPasswordValid) {
-        setState(() {
-          _errorMessage = "Password salah. Harap masukkan password yang benar.";
-        });
-        return;
-      }
-
-      try {
-        await FirebaseFirestore.instance
-            .collection('user_data')
-            .doc(user.uid)
-            .update({
-          'full_name': _fullNameController.text,
-          'username': _usernameController.text,
-          'user_email': _emailController.text,
-        });
-
-        if (mounted) {
-          Navigator.pop(context, true);
-        }
-      } catch (e) {
+    } catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Gagal memperbarui profil: $e')),
         );
@@ -82,24 +99,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userDoc = await FirebaseFirestore.instance
-          .collection('user_data')
-          .doc(user.uid)
-          .get();
-
-      setState(() {
-        _fullNameController.text = userDoc['full_name'] ?? '';
-        _usernameController.text = userDoc['username'] ?? '';
-        _emailController.text = userDoc['user_email'] ?? '';
-        _gender = userDoc['user_gender'];
-        _isLoading = false;
-      });
-    }
   }
 
   @override

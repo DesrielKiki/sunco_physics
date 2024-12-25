@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/data/helper/firebase_helper.dart';
 import 'package:sunco_physics/presentation/component/auth_textfield.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
@@ -12,6 +13,8 @@ class EditPasswordScreen extends StatefulWidget {
 }
 
 class _EditPasswordScreenState extends State<EditPasswordScreen> {
+  final FirebaseHelper _firebaseHelper = FirebaseHelper();
+
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -47,54 +50,33 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
   }
 
   Future<void> _updatePassword() async {
-    final user = FirebaseAuth.instance.currentUser;
-
     String oldPassword = _oldPasswordController.text.trim();
     String newPassword = _newPasswordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
-    setState(() {
-      _errorMessage = null; // Reset error message
-    });
+    setState(() => _errorMessage = null);
 
     if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      setState(() {
-        _errorMessage = "Semua kolom harus diisi.";
-      });
+      setState(() => _errorMessage = "Semua kolom harus diisi.");
       return;
     }
 
     if (newPassword != confirmPassword) {
-      setState(() {
-        _errorMessage = "Password baru dan konfirmasi password tidak cocok.";
-      });
+      setState(() =>
+          _errorMessage = "Password baru dan konfirmasi password tidak cocok.");
       return;
     }
 
     if (newPassword.length < 6) {
-      setState(() {
-        _errorMessage = "Password baru harus lebih dari 6 karakter.";
-      });
+      setState(
+          () => _errorMessage = "Password baru harus lebih dari 6 karakter.");
       return;
     }
 
     try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: oldPassword,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-      await user.updatePassword(newPassword);
-
-      setState(() {
-        _isLoading = false;
-        _errorMessage = null; // Clear error message on success
-      });
+      setState(() => _isLoading = true);
+      await _firebaseHelper.updatePassword(oldPassword, newPassword);
+      setState(() => _isLoading = false);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -105,23 +87,10 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
+        _errorMessage = e is FirebaseAuthException && e.code == 'wrong-password'
+            ? "Password lama yang Anda masukkan salah."
+            : "Terjadi kesalahan yang tidak terduga.";
       });
-
-      if (e is FirebaseAuthException) {
-        if (e.code == 'wrong-password') {
-          setState(() {
-            _errorMessage = "Password lama yang Anda masukkan salah.";
-          });
-        } else {
-          setState(() {
-            _errorMessage = "Password lama yang Anda masukkan salah.";
-          });
-        }
-      } else {
-        setState(() {
-          _errorMessage = "Terjadi kesalahan yang tidak terduga.";
-        });
-      }
     }
   }
 
@@ -218,7 +187,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16, left: 8),  
+                          padding: const EdgeInsets.only(bottom: 16, left: 8),
                           child: Text(
                             _errorMessage!,
                             style: const TextStyle(

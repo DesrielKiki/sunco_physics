@@ -33,4 +33,43 @@ class FirebaseHelper {
       throw Exception('Error saving user data');
     }
   }
+
+  Future<User?> getCurrentUser() async {
+    return _auth.currentUser;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(
+      String userId) async {
+    return await _firestore.collection('user_data').doc(userId).get();
+  }
+
+  Future<void> updateUserData(String userId, Map<String, dynamic> data) async {
+    await _firestore.collection('user_data').doc(userId).update(data);
+  }
+
+  Future<bool> verifyPassword(String email, String password) async {
+    try {
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: password);
+      await _auth.currentUser!.reauthenticateWithCredential(credential);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String oldPassword, String newPassword) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+          code: 'user-not-found', message: 'User not found');
+    }
+
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: oldPassword,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPassword);
+  }
 }
