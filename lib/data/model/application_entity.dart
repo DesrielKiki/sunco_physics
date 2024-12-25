@@ -14,6 +14,11 @@ class ApplicationEntity {
       'icon': Icons.work,
       'route': '/workCalculator',
     },
+    {
+      'title': 'Energi Kinetik',
+      'icon': Icons.work,
+      'route': '/kineticEnergyCalculator',
+    },
   ];
 
   ///list of Lesson data

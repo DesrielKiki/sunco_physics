@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/kinetic_energy_calculator._screen.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy_calculator.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dart';
@@ -29,6 +30,7 @@ class AppRoutes {
   static const String calculatorList = '/calculatorList';
   static const String potentialEnergyCalculator = '/potentialEnergyCalculator';
   static const String workCalculator = '/workCalculator';
+  static const String kineticEnergyCalculator = '/kineticEnergyCalculator';
 
   /// lesson List Route
   static const String offlineLessonList = '/offlineLessonList';
@@ -78,6 +80,10 @@ class AppRoutes {
       case workCalculator:
         return MaterialPageRoute(
           builder: (_) => const WorkCalculatorScreen(),
+        );
+      case kineticEnergyCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const KineticEnergyCalculatorScreen(),
         );
 
       /**
