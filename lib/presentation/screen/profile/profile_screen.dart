@@ -74,14 +74,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 128),
           child: Center(
-            // Menjaga konten tetap di tengah horizontal
             child: Column(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Menjaga konten tetap di tengah vertikal
-              crossAxisAlignment: CrossAxisAlignment
-                  .center, // Menjaga konten tetap di tengah horizontal
-              mainAxisSize: MainAxisSize
-                  .min, // Kolom tidak memakan ruang lebih dari yang diperlukan
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Stack(
                   clipBehavior: Clip.none,

@@ -28,7 +28,8 @@ class AppRoutes {
       '/potential_energy_calculator';
 
   /// lesson List Route
-  static const String lessonList = '/lessonList';
+  static const String offlineLessonList = '/offlineLessonList';
+  static const String onlineLessonList = '/onlineLessonList';
   static const String workLesson = '/work_lesson';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -74,9 +75,13 @@ class AppRoutes {
        * Lesson List Route
        */
 
-      case lessonList:
+      case onlineLessonList:
         return MaterialPageRoute(
           builder: (_) => const OnlineLessonListScreen(),
+        );
+      case offlineLessonList:
+        return MaterialPageRoute(
+          builder: (_) => const OfflineLessonListScreen(),
         );
       case workLesson:
         return MaterialPageRoute(

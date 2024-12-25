@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunco_physics/presentation/screen/auth/login/login_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -106,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           showBlurOverlay = false;
                         });
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const LoginScreen()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorConfig.darkBlue,
@@ -153,7 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 192.0,
                   padding: const EdgeInsets.symmetric(
                       horizontal: 64.0, vertical: 52.0),
                   decoration: const BoxDecoration(
@@ -194,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 52),
+                const SizedBox(height: 24),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 42.0),
                   child: Text(
@@ -206,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 16),
                 GestureDetector(
                   onTap: isLoggedIn
                       ? () {
@@ -215,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       : _showAlertDialog,
                   child: Container(
                     width: double.infinity,
-                    height: 188,
                     margin: const EdgeInsets.symmetric(horizontal: 32.0),
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     decoration: BoxDecoration(
@@ -234,41 +236,49 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Opacity(
-                            opacity: isLoggedIn ? 1.0 : 0.5,
-                            child: const Text(
-                              'Kalkulator',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 24,
+                        top: 24,
+                        left: 24,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Opacity(
+                              opacity: isLoggedIn ? 1.0 : 0.5,
+                              child: const Text(
+                                'Kalkulator',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.start,
                               ),
-                              textAlign: TextAlign.start,
                             ),
                           ),
-                        ),
-                        Image.asset(
-                          'assets/ic_kalkulator.png',
-                          opacity: AlwaysStoppedAnimation(
-                            isLoggedIn ? 1.0 : 0.5,
+                          Image.asset(
+                            width: 124,
+                            height: 124,
+                            'assets/ic_kalkulator.png',
+                            opacity: AlwaysStoppedAnimation(
+                              isLoggedIn ? 1.0 : 0.5,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/lessonList');
+                    Navigator.pushNamed(context, '/offlineLessonList');
                   },
                   child: Container(
                     width: double.infinity,
-                    height: 188,
                     margin: const EdgeInsets.symmetric(horizontal: 32.0),
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     decoration: const BoxDecoration(
@@ -283,27 +293,101 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/ic_book.png',
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 4.0),
-                            child: Text(
-                              'Materi',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 24,
+                        top: 24,
+                        right: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            width: 124,
+                            height: 124,
+                            'assets/ic_book.png',
+                          ),
+                          const Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 4.0),
+                              child: Text(
+                                'Offline Lesson',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.end,
                               ),
-                              textAlign: TextAlign.end,
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                GestureDetector(
+                  onTap: isLoggedIn
+                      ? () {
+                          Navigator.pushNamed(context, '/onlineLessonList');
+                        }
+                      : _showAlertDialog,
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(horizontal: 32.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      color: isLoggedIn
+                          ? ColorConfig.darkBlue
+                          : ColorConfig.darkGrey,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(30.0),
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 12.0,
+                          offset: Offset(0, 4),
+                          spreadRadius: 3.0,
                         ),
                       ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 24,
+                        top: 24,
+                        left: 24,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Opacity(
+                              opacity: isLoggedIn ? 1.0 : 0.5,
+                              child: const Text(
+                                'Online Lesson',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ),
+                          Image.asset(
+                            width: 124,
+                            height: 124,
+                            'assets/ic_online_lesson.png',
+                            opacity: AlwaysStoppedAnimation(
+                              isLoggedIn ? 1.0 : 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

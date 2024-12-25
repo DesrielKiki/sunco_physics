@@ -17,24 +17,39 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
   List<Map<String, dynamic>> _allLessons = [];
   String _searchText = '';
   bool isAdmin = false;
+  bool isLoading = true;
 
   // Fetch lessons from Firestore
   Future<void> _fetchLessons() async {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('lessons').get();
-    final lessons = snapshot.docs.map((doc) {
-      return {
-        'id': doc.id, // ID dokumen
-        'title': doc['title'],
-        'content': doc['content'],
-        'createdAt': doc['createdAt'].toDate(),
-      };
-    }).toList();
-
     setState(() {
-      _allLessons = lessons;
-      _filteredLessons = lessons; // Initially show all lessons
+      isLoading = true;
     });
+
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('lessons').get();
+      final lessons = snapshot.docs.map((doc) {
+        return {
+          'id': doc.id, // ID dokumen
+          'title': doc['title'],
+          'content': doc['content'],
+          'createdAt': doc['createdAt'].toDate(),
+        };
+      }).toList();
+
+      setState(() {
+        _allLessons = lessons;
+        _filteredLessons = lessons; // Initially show all lessons
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching lessons: $e')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void _checkAdminStatus() async {
@@ -87,53 +102,60 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
         foregroundColor: ColorConfig.onPrimaryColor,
       ),
       floatingActionButton: isAdmin
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/addLesson');
-              },
-              backgroundColor: ColorConfig.primaryColor,
-              child: const Icon(Icons.add),
+          ? Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/addLesson');
+                },
+                backgroundColor: ColorConfig.primaryColor,
+                child: const Icon(Icons.add, color: ColorConfig.onPrimaryColor),
+              ),
             )
           : null,
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search Material',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: _searchText.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() {
-                              _filteredLessons = _allLessons;
-                            });
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: Colors.grey.shade200,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 16, left: 16, right: 16),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search Material',
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: _searchText.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() {
+                                    _filteredLessons = _allLessons;
+                                  });
+                                },
+                              )
+                            : null,
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: LessonGrid(filteredLessons: _filteredLessons),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: LessonGrid(filteredLessons: _filteredLessons),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

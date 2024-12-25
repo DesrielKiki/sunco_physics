@@ -8,30 +8,40 @@ class LessonDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Lesson Detail')),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
-            .collection('lessons')
-            .doc(lessonId)
-            .get(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return FutureBuilder<DocumentSnapshot>(
+      future:
+          FirebaseFirestore.instance.collection('lessons').doc(lessonId).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Loading...')),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
 
-          if (snapshot.hasError) {
-            return const Center(child: Text('Error fetching lesson data'));
-          }
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Error')),
+            body: const Center(child: Text('Error fetching lesson data')),
+          );
+        }
 
-          if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text('Lesson not found'));
-          }
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Not Found')),
+            body: const Center(child: Text('Lesson not found')),
+          );
+        }
 
-          final lesson = snapshot.data!;
-          final content = List<Map<String, dynamic>>.from(lesson['content']);
+        // Extract data from Firestore document
+        final lesson = snapshot.data!;
+        final title = lesson['title']
+            as String; // Assuming there's a `title` field in Firestore
+        final content = List<Map<String, dynamic>>.from(lesson['content']);
 
-          return ListView(
+        return Scaffold(
+          appBar: AppBar(title: Text(title)),
+          body: ListView(
             padding: const EdgeInsets.all(16.0),
             children: content.map((item) {
               if (item['type'] == 'text') {
@@ -42,7 +52,23 @@ class LessonDetailScreen extends StatelessWidget {
               } else if (item['type'] == 'image') {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.network(item['value']),
+                  child: Image.network(
+                    item['value'],
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    (loadingProgress.expectedTotalBytes ?? 1)
+                                : null,
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 );
               } else if (item['type'] == 'question') {
                 final question = item['value'];
@@ -66,9 +92,9 @@ class LessonDetailScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               }
             }).toList(),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

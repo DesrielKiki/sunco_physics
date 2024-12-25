@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:sunco_physics/data/model/application_entity.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class LessonListScreen extends StatefulWidget {
-  const LessonListScreen({super.key});
+class OfflineLessonListScreen extends StatefulWidget {
+  const OfflineLessonListScreen({super.key});
 
   @override
-  State<LessonListScreen> createState() => _LessonListScreenState();
+  State<OfflineLessonListScreen> createState() =>
+      _OfflineLessonListScreenState();
 }
 
-class _LessonListScreenState extends State<LessonListScreen> {
+class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredLessons = ApplicationEntity.lesson;
   String _searchText = '';
@@ -65,18 +66,6 @@ class _LessonListScreenState extends State<LessonListScreen> {
         title: const Text('Material Physics'),
         foregroundColor: ColorConfig.onPrimaryColor,
       ),
-      floatingActionButton: isAdmin
-          ? FloatingActionButton(
-              onPressed: () {
-                // Tindakan untuk menambahkan materi
-                // Misalnya pindah ke halaman untuk menambah materi baru
-                Navigator.pushNamed(context, '/addLesson');
-              },
-              backgroundColor: ColorConfig.primaryColor,
-              child: const Icon(Icons.add),
-            )
-          : null, // Tidak tampil jika bukan admin
-
       body: Center(
         child: Column(
           children: [
