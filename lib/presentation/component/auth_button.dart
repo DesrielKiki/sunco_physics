@@ -26,17 +26,23 @@ class _AuthButtonState extends State<AuthButton> {
           horizontal: 12,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
         ),
-        minimumSize: const Size(double.infinity, 50),
+        minimumSize: const Size(
+          double.infinity,
+          50,
+        ),
       ),
       onPressed: widget.onPressed,
       child: Text(
         widget.buttonText,
         style: const TextStyle(
-            color: ColorConfig.onPrimaryColor,
-            fontSize: 20,
-            fontWeight: FontWeight.bold),
+          color: ColorConfig.onPrimaryColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

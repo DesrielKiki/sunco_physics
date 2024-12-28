@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/kinetic_energy_calculator._screen.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/friction_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/potential_energy_calculator.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dart';
@@ -38,6 +39,7 @@ class AppRoutes {
   static const String workLesson = '/workLesson';
   static const String potentialEnergyLesson = '/potentialEnergyLesson';
   static const String kineticEnergyLesson = '/kineticEnergyLesson';
+  static const String frictionLesson = '/frictionLesson';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -106,10 +108,13 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const PotentialEnergyLessonScreen(),
         );
-
       case kineticEnergyLesson:
         return MaterialPageRoute(
           builder: (_) => const KineticEnergyLessonScreen(),
+        );
+      case frictionLesson:
+        return MaterialPageRoute(
+          builder: (_) => const FrictionLessonScreen(),
         );
 
       default:

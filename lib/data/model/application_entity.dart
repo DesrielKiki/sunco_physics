@@ -29,6 +29,11 @@ class ApplicationEntity {
       'route': '/workLesson',
     },
     {
+      'title': 'Gaya Gesek',
+      'icon': Icons.work,
+      'route': '/frictionLesson',
+    },
+    {
       'title': 'Energi Potensial',
       'icon': Icons.energy_savings_leaf,
       'route': '/potentialEnergyLesson',

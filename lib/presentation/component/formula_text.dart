@@ -19,6 +19,7 @@ class FormulaText extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 26,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(height: 12),
