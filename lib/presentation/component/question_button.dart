@@ -13,9 +13,9 @@ class QuestionButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.question,
-    required this.answer,
     required this.known,
     required this.asked,
+    required this.answer,
     required this.conclusion,
   });
 
