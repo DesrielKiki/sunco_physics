@@ -18,16 +18,19 @@ class _FrictionLessonScreenState extends State<FrictionLessonScreen>
     with TickerProviderStateMixin {
   final List<InteractivePoint> points = [
     InteractivePoint(
-        position: const Offset(150, 195),
-        lineLength: 65,
-        title: "Gaya Gesek",
-        description:
-            'Gaya gesek adalah resistensi yang terjadi saat dua permukaan saling bersentuhan. Gaya gesek terdiri dari dua jenis, yaitu gaya gesek statis dan gaya gesek kinetis. Gaya gesek statis adalah gaya gesek yang terjadi saat benda diam, sedangkan gaya ges'),
+      position: const Offset(150, 195),
+      lineLength: 65,
+      title: "Gaya Gesek",
+      description:
+          'Gaya gesek adalah resistensi yang terjadi saat dua permukaan saling bersentuhan. Gaya gesek terdiri dari dua jenis, yaitu gaya gesek statis dan gaya gesek kinetis. Gaya gesek statis adalah gaya gesek yang terjadi saat benda diam, sedangkan gaya gesek kinetis adalah gaya gesek yang terjadi pada benda yang bergerak',
+    ),
     InteractivePoint(
-        position: const Offset(200, 125),
-        lineLength: 135,
-        title: "Koefisien Gaya Gesek",
-        description: ''),
+      position: const Offset(200, 125),
+      lineLength: 135,
+      title: "Koefisien Gaya Gesek",
+      description:
+          'Koefisien gaya gesek adalah angka yang menunjukkan seberapa besar gesekan antara dua permukaan yang bersentuhan. Angka ini bergantung pada jenis permukaan, apakah licin atau kasar. Jika koefisiennya kecil, gesekan akan lebih kecil seperti pada es dan logam, sedangkan jika koefisiennya besar, gesekan lebih besar seperti pada karet dan aspal. Koefisien ini biasanya dilambangkan dengan huruf μ dan tidak memiliki satuan. ',
+    ),
   ];
 
   late List<AnimationController> _animationControllers;

@@ -7,6 +7,8 @@ import 'package:sunco_physics/presentation/screen/calculator/calculator_list.dar
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/work_calculator.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/potential_energy_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/pulley_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/spring_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/online_lesson/add_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson_list.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/work_lesson.dart';
@@ -36,10 +38,13 @@ class AppRoutes {
   /// lesson List Route
   static const String offlineLessonList = '/offlineLessonList';
   static const String onlineLessonList = '/onlineLessonList';
+
   static const String workLesson = '/workLesson';
   static const String potentialEnergyLesson = '/potentialEnergyLesson';
   static const String kineticEnergyLesson = '/kineticEnergyLesson';
   static const String frictionLesson = '/frictionLesson';
+  static const String pulleyLesson = '/pulleyLesson';
+  static const String springLesson = '/springLesson';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -100,6 +105,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const OfflineLessonListScreen(),
         );
+
       case workLesson:
         return MaterialPageRoute(
           builder: (_) => const WorkLessonScreen(),
@@ -115,6 +121,14 @@ class AppRoutes {
       case frictionLesson:
         return MaterialPageRoute(
           builder: (_) => const FrictionLessonScreen(),
+        );
+      case springLesson:
+        return MaterialPageRoute(
+          builder: (_) => const SpringLessonScreen(),
+        );
+      case pulleyLesson:
+        return MaterialPageRoute(
+          builder: (_) => const PulleyLessonScreen(),
         );
 
       default:

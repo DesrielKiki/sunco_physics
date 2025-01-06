@@ -22,7 +22,8 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
       position: const Offset(150, 195),
       lineLength: 65,
       title: "Massa",
-      description: '',
+      description:
+          'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',
     ),
     InteractivePoint(
         position: const Offset(200, 125),
