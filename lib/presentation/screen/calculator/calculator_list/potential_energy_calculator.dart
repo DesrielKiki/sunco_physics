@@ -15,7 +15,6 @@ class _PotentialEnergyCalculatorScreenState
     with TickerProviderStateMixin {
   final TextEditingController _massaController = TextEditingController();
   final TextEditingController _ketinggianController = TextEditingController();
-  String _result = '';
   double _selectedGravitasi = 9.8;
 
   late AnimationController _animationController;
@@ -314,18 +313,6 @@ class _PotentialEnergyCalculatorScreenState
                             height: 100,
                             width: double.infinity,
                           ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: Colors.grey.shade300,
-                    child: Center(
-                      child: Text(
-                        _result,
-                        style: const TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 20),
                   Container(
