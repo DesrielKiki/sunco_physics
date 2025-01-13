@@ -159,7 +159,6 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
       appBar: AppBar(
         backgroundColor: ColorConfig.primaryColor,
         foregroundColor: ColorConfig.onPrimaryColor,
-        centerTitle: true,
         title: const Text(
           'Gaya Pegas',
         ),

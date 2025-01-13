@@ -114,7 +114,6 @@ class _PulleyLessonScreenState extends State<PulleyLessonScreen>
         title: const Text('Katrol'),
         backgroundColor: ColorConfig.primaryColor,
         foregroundColor: ColorConfig.onPrimaryColor,
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

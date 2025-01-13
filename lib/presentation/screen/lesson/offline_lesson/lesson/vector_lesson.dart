@@ -11,7 +11,6 @@ class VectorLessonScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorConfig.primaryColor,
         foregroundColor: ColorConfig.onPrimaryColor,
-        centerTitle: true,
         title: const Text(
           'Vektor',
         ),
