@@ -92,7 +92,7 @@ class AppRoutes {
         );
       case workCalculator:
         return MaterialPageRoute(
-          builder: (_) => const WorkCalculatorScreen(),
+          builder: (_) =>  WorkCalculatorScreen(),
         );
       case kineticEnergyCalculator:
         return MaterialPageRoute(

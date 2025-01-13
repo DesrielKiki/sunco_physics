@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/component/output_calculator.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class WorkCalculatorScreen extends StatefulWidget {
@@ -10,43 +13,21 @@ class WorkCalculatorScreen extends StatefulWidget {
 
 class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
     with TickerProviderStateMixin {
-  final TextEditingController _forceController = TextEditingController();
+  int _numberOfForces = 1;
+
+  final List<TextEditingController> _forceControllers = [];
+  final List<TextEditingController> _angleControllers = [];
   final TextEditingController _distanceController = TextEditingController();
-  final TextEditingController _angleController = TextEditingController();
-  String _result = '';
+
+  String _known = '';
+  String _asked = '';
+  String _answer = '';
+  String _conclusion = '';
 
   late AnimationController _animationController;
   late Animation<double> _animation;
   late Animation<double> _shadowAnimation;
   late Animation<double> _opacityAnimation;
-
-  void _resetFields() {
-    setState(() {
-      _forceController.clear();
-      _distanceController.clear();
-      _angleController.clear();
-      _result = '';
-    });
-  }
-
-  void _calculateWork() {
-    final double? force = double.tryParse(_forceController.text);
-    final double? distance = double.tryParse(_distanceController.text);
-    final double? angle = double.tryParse(_angleController.text);
-
-    if (force != null && distance != null && angle != null) {
-      final double angleInRadians =
-          angle * (3.14159 / 180); // Convert to radians
-      final double work = force * distance * angleInRadians.abs();
-      setState(() {
-        _result = 'Usaha: ${work.toStringAsFixed(2)} Joule';
-      });
-    } else {
-      setState(() {
-        _result = 'Input tidak valid!';
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -70,12 +51,121 @@ class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
     );
 
     _animationController.forward();
+
+    _updateForceControllers();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    for (var controller in _forceControllers) {
+      controller.dispose();
+    }
+    for (var controller in _angleControllers) {
+      controller.dispose();
+    }
+    _distanceController.dispose();
     super.dispose();
+  }
+
+  void _updateForceControllers() {
+    setState(() {
+      while (_forceControllers.length < _numberOfForces) {
+        _forceControllers.add(TextEditingController());
+        _angleControllers.add(TextEditingController());
+      }
+      while (_forceControllers.length > _numberOfForces) {
+        _forceControllers.removeLast().dispose();
+        _angleControllers.removeLast().dispose();
+      }
+    });
+  }
+
+  void _resetFields() {
+    setState(() {
+      for (var controller in _forceControllers) {
+        controller.clear();
+      }
+      for (var controller in _angleControllers) {
+        controller.clear();
+      }
+      _distanceController.clear();
+      _known = '';
+      _asked = '';
+      _answer = '';
+      _conclusion = '';
+    });
+  }
+
+  void _calculateWork() {
+    final double? distance = double.tryParse(_distanceController.text);
+    if (distance == null || distance <= 0) {
+      _showErrorDialog('Masukkan jarak (s) yang valid (lebih dari 0).');
+      return;
+    }
+
+    for (int i = 0; i < _numberOfForces; i++) {
+      final double? force = double.tryParse(_forceControllers[i].text);
+      final double? angle = double.tryParse(_angleControllers[i].text);
+
+      if (force == null || force <= 0) {
+        _showErrorDialog(
+            'Masukkan gaya (F${i + 1}) yang valid (lebih dari 0).');
+        return;
+      }
+      if (angle == null || angle < 0 || angle > 360) {
+        _showErrorDialog('Masukkan sudut (θ${i + 1}) yang valid (0° - 360°).');
+        return;
+      }
+    }
+
+    double totalWork = 0;
+    String knownDetails = '';
+    String calculationSteps = '';
+    String totalCalculationSteps = '';
+
+    for (int i = 0; i < _numberOfForces; i++) {
+      final double force = double.parse(_forceControllers[i].text);
+      final double angle = double.parse(_angleControllers[i].text);
+
+      final double angleInRadians = angle * (pi / 180);
+      final double work = force * distance * cos(angleInRadians);
+      totalWork += work;
+
+      knownDetails += 'Gaya F${i + 1} = $force N, Sudut θ${i + 1} = $angle°\n';
+      calculationSteps +=
+          'W${i + 1} = F${i + 1} × s × cos(θ${i + 1})\n   = $force × $distance × cos($angle°)\n   = ${work.toStringAsFixed(2)} Joule\n\n';
+
+      totalCalculationSteps +=
+          i == 0 ? work.toStringAsFixed(2) : ' + ${work.toStringAsFixed(2)}';
+    }
+
+    totalCalculationSteps += ' = ${totalWork.toStringAsFixed(2)} Joule';
+
+    setState(() {
+      _known = 'Jarak (s) = $distance m\n$knownDetails';
+      _asked = 'Berapa besar usaha (W)?';
+      _answer =
+          'Langkah Perhitungan:\n$calculationSteps Total Usaha:\nW = Σ(W1 + W2 + ... + Wn)\n   = $totalCalculationSteps';
+      _conclusion =
+          'Usaha yang dilakukan adalah ${totalWork.toStringAsFixed(2)} Joule.';
+    });
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Input Tidak Valid'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -120,6 +210,7 @@ class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               clipBehavior: Clip.none,
@@ -163,28 +254,54 @@ class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildInputField(
-                    label: 'Gaya (F) :',
-                    controller: _forceController,
-                    hint: 'Masukkan angka (N)',
+                  DropdownButton<int>(
+                    isExpanded: true,
+                    value: _numberOfForces,
+                    menuWidth: double.infinity,
+                    items: List.generate(
+                      4,
+                      (index) => DropdownMenuItem(
+                        value: index + 1,
+                        child: Text('${index + 1} Gaya'),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _numberOfForces = value;
+                          _updateForceControllers();
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(height: 10),
+                  ...List.generate(_numberOfForces, (index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInputField(
+                          label: 'Gaya F${index + 1} (N):',
+                          controller: _forceControllers[index],
+                          hint: 'Masukkan gaya (N)',
+                        ),
+                        const SizedBox(height: 10),
+                        _buildInputField(
+                          label: 'Sudut θ${index + 1} (°):',
+                          controller: _angleControllers[index],
+                          hint: 'Masukkan sudut (°)',
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    );
+                  }),
                   _buildInputField(
                     label: 'Jarak (s) :',
                     controller: _distanceController,
-                    hint: 'Masukkan angka (m)',
-                  ),
-                  const SizedBox(height: 10),
-                  _buildInputField(
-                    label: 'Sudut (θ) :',
-                    controller: _angleController,
-                    hint: 'Masukkan angka (°)',
+                    hint: 'Masukkan jarak (m)',
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -193,69 +310,40 @@ class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
                       ElevatedButton(
                         onPressed: _resetFields,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorConfig.darkBlue,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 38.0, vertical: 12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
+                          backgroundColor: ColorConfig.redWarning,
+                          foregroundColor: ColorConfig.onPrimaryColor,
                         ),
-                        child: const Text(
-                          'Reset',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: ColorConfig.onPrimaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: const Text('Reset'),
                       ),
                       ElevatedButton(
                         onPressed: _calculateWork,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorConfig.darkBlue,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 38.0, vertical: 12.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
+                          backgroundColor: ColorConfig.green,
+                          foregroundColor: ColorConfig.onPrimaryColor,
                         ),
-                        child: const Text(
-                          'Hitung',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: ColorConfig.onPrimaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: const Text('Hitung'),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    height: 100,
                     color: Colors.grey.shade300,
-                    child: Center(
-                      child: Text(
-                        _result,
-                        style: const TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    child: _conclusion.isNotEmpty
+                        ? OutputCalculator(
+                            known: _known,
+                            asked: _asked,
+                            answer: _answer,
+                            conclusion: _conclusion,
+                          )
+                        : const SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                          ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16.0),
@@ -309,10 +397,7 @@ class _WorkCalculatorScreenState extends State<WorkCalculatorScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 16),
-        ),
+        Text(label),
         TextField(
           controller: controller,
           decoration: InputDecoration(

@@ -12,7 +12,6 @@ class CalculatorListScreen extends StatefulWidget {
 class _CalculatorListScreenState extends State<CalculatorListScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredCalculator = ApplicationEntity.calculator;
-  String _searchText = '';
 
   @override
   void initState() {
@@ -30,8 +29,6 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
 
   void _onSearchChanged() {
     setState(() {
-      _searchText = _searchController.text;
-
       _filteredCalculator = ApplicationEntity.calculator
           .where((calculator) => calculator['title']!
               .toLowerCase()
@@ -43,56 +40,50 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorConfig.primaryColor,
-        foregroundColor: ColorConfig.onPrimaryColor,
-        title: const Text('Physics Calculators'),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-            child: SearchBar(
-              controller: _searchController,
-              hintText: 'Search Calculator',
-              trailing: [
-                IconButton(
-                  icon: _searchText.isEmpty
-                      ? const Icon(Icons.search)
-                      : const Icon(Icons.close),
-                  onPressed: () {
-                    if (_searchText.isNotEmpty) {
-                      _searchController.clear();
-                      setState(() {
-                        _searchText = '';
-                        _filteredCalculator = ApplicationEntity.calculator;
-                      });
-                    }
-                  },
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  _searchText = value;
-                  _filteredCalculator = ApplicationEntity.calculator
-                      .where((calculator) => calculator['title']!
-                          .toLowerCase()
-                          .contains(value.toLowerCase()))
-                      .toList();
-                });
-              },
-              padding: WidgetStateProperty.all(
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: ColorConfig.primaryColor,
+            floating: true,
+            pinned: false,
+            snap: true,
+            title: const Text(
+              'Physics Calculators',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            foregroundColor: Colors.white,
+            expandedHeight: 120.0, // Tinggi AppBar + Search Bar
+            flexibleSpace: FlexibleSpaceBar(
+              background: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search Calculator',
+                        prefixIcon: const Icon(Icons.search),
+                        filled: true,
+                        fillColor: Colors.white, // Background putih
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ),
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  CalculatorGridItem(filteredCalculator: _filteredCalculator),
-            ),
+          SliverPadding(
+            padding: const EdgeInsets.all(8.0),
+            sliver: CalculatorGridItem(filteredCalculator: _filteredCalculator),
           ),
         ],
       ),
@@ -110,14 +101,17 @@ class CalculatorGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return filteredCalculator.isEmpty
-        ? Center(
-            child: Column(
+    if (filteredCalculator.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/ic_notfound.png',
+                height: 120,
               ),
               const SizedBox(height: 20),
               const Text(
@@ -129,46 +123,54 @@ class CalculatorGridItem extends StatelessWidget {
                 ),
               ),
             ],
-          ))
-        : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: 1,
-            ),
-            itemCount: filteredCalculator.length,
-            itemBuilder: (context, index) {
-              final calculator = filteredCalculator[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, calculator['route'] as String);
-                },
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        calculator['icon'] as IconData,
-                        size: 40,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        calculator['title'] as String,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+          ),
+        ),
+      );
+    } else {
+      return SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final calculator = filteredCalculator[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, calculator['route'] as String);
+              },
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              );
-            },
-          );
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      calculator['icon'] as IconData,
+                      size: 40,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      calculator['title'] as String,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          childCount: filteredCalculator.length,
+        ),
+      );
+    }
   }
 }
