@@ -3,7 +3,6 @@ import 'package:sunco_physics/data/model/interactive_point.dart';
 import 'package:sunco_physics/presentation/component/bullet_point_list.dart';
 import 'package:sunco_physics/presentation/component/formula_text.dart';
 import 'package:sunco_physics/presentation/component/lesson_dialog.dart';
-import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/component/vertical_line_painter.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';

@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class AddLessonPage extends StatefulWidget {
   const AddLessonPage({super.key});
@@ -127,17 +128,26 @@ class _AddLessonPageState extends State<AddLessonPage> {
           children: [
             TextField(
               controller: _titleTextController,
-              decoration: InputDecoration(
-                labelText: 'Add title',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: _addTextContent,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(
+                  color: ColorConfig.onPrimaryColor,
                 ),
+                focusColor: ColorConfig.primaryColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                labelText: 'title',
               ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: _textController,
               decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 labelText: 'Add Text',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.add),
@@ -152,6 +162,7 @@ class _AddLessonPageState extends State<AddLessonPage> {
                 ElevatedButton.icon(
                   onPressed: _addImageContent,
                   icon: const Icon(Icons.image),
+                
                   label: const Text('Add Image'),
                 ),
                 ElevatedButton.icon(
