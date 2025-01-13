@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/firebase_options.dart';
 import 'package:sunco_physics/presentation/navigation/app_routes.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/spring_lesson.dart';
 
 void main() async {
@@ -24,15 +25,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.splash,
-      onGenerateRoute: AppRoutes.generateRoute,
+      // initialRoute: AppRoutes.splash,
+      //onGenerateRoute: AppRoutes.generateRoute,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
         ),
         useMaterial3: true,
       ),
-      //home: const SpringLessonScreen(),
+      home: const KineticEnergyLessonScreen(),
     );
   }
 }
