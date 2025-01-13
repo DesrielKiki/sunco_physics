@@ -3,8 +3,8 @@ import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class KinematicLesson extends StatelessWidget {
-  const KinematicLesson({super.key});
+class KinematicLessonScreen extends StatelessWidget {
+  const KinematicLessonScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

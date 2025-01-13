@@ -29,15 +29,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      // initialRoute: AppRoutes.splash,
-      //onGenerateRoute: AppRoutes.generateRoute,
+      initialRoute: AppRoutes.splash,
+      onGenerateRoute: AppRoutes.generateRoute,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
         ),
         useMaterial3: true,
       ),
-      home: const VectorLesson(),
+      //home: const VectorLesson(),
     );
   }
 }

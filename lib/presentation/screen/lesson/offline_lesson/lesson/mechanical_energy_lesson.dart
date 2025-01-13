@@ -4,8 +4,8 @@ import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class MechanicalEnergyLesson extends StatelessWidget {
-  const MechanicalEnergyLesson({super.key});
+class MechanicalEnergyLessonScreen extends StatelessWidget {
+  const MechanicalEnergyLessonScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

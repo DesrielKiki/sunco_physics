@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/presentation/component/bullet_point_list.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class VectorLesson extends StatelessWidget {
-  const VectorLesson({super.key});
+class VectorLessonScreen extends StatelessWidget {
+  const VectorLessonScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

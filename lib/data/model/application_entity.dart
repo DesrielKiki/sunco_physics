@@ -34,6 +34,11 @@ class ApplicationEntity {
       'route': '/kineticEnergyLesson',
     },
     {
+      'title': 'Energi Mekanik',
+      'icon': Icons.energy_savings_leaf,
+      'route': '/mechanicalEnergyLesson',
+    },
+    {
       'title': 'Gaya Gesek',
       'icon': Icons.work,
       'route': '/frictionLesson',
@@ -43,17 +48,26 @@ class ApplicationEntity {
       'icon': Icons.work,
       'route': '/workLesson',
     },
-    //energi mekanik
     {
       'title': 'Katrol',
       'icon': Icons.turn_sharp_right_outlined,
       'route': '/pulleyLesson',
     },
-    //?
+
+    {
+      'title': 'kinematik',
+      'icon': Icons.turn_sharp_right_outlined,
+      'route': '/kinematicLesson',
+    },
     {
       'title': 'Gaya Pegas',
       'icon': Icons.turn_sharp_right_outlined,
       'route': '/springLesson',
+    },
+    {
+      'title': 'Vektor',
+      'icon': Icons.turn_sharp_right_outlined,
+      'route': '/vectorLesson',
     },
 
     // static const String potentialEnergyLesson = '/potentialEnergyLesson';
