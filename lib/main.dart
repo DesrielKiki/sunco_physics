@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/firebase_options.dart';
 import 'package:sunco_physics/presentation/navigation/app_routes.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinematic_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/mechanical_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/potential_energy_lesson.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MechanicalEnergyLesson(),
+      home: const KinematicLesson(),
     );
   }
 }
