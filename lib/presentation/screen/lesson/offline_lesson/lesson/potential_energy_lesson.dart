@@ -1,11 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/data/model/interactive_point.dart';
 import 'package:sunco_physics/presentation/component/formula_text.dart';
+import 'package:sunco_physics/presentation/component/lesson_dialog.dart';
 import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
+import 'package:sunco_physics/presentation/component/vertical_line_painter.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class PotentialEnergyLessonScreen extends StatelessWidget {
+class PotentialEnergyLessonScreen extends StatefulWidget {
   const PotentialEnergyLessonScreen({super.key});
+
+  @override
+  State<PotentialEnergyLessonScreen> createState() =>
+      _PotentialEnergyLessonScreenState();
+}
+
+class _PotentialEnergyLessonScreenState
+    extends State<PotentialEnergyLessonScreen> with TickerProviderStateMixin {
+  final List<InteractivePoint> points = [
+    InteractivePoint(
+      position: const Offset(96, 105),
+      lineLength: 200,
+      title: "Massa",
+      description: '',
+    ),
+    InteractivePoint(
+      position: const Offset(134.5, 105),
+      lineLength: 170,
+      title: "Percepatan Gravitasi",
+      description: '',
+    ),
+    InteractivePoint(
+      position: const Offset(176, 270),
+      lineLength: 50,
+      title: "Tinggi",
+      description: '',
+    ),
+  ];
+
+  late List<AnimationController> _animationControllers;
+  late List<Animation<double>> _opacityAnimations;
+  late List<bool> clickedPoints;
+  late List<double> opacityValues;
+
+  @override
+  void initState() {
+    super.initState();
+
+    clickedPoints = List.generate(points.length, (_) => false);
+    opacityValues = List.generate(points.length, (_) => 1.0);
+
+    _animationControllers = List.generate(
+      points.length,
+      (_) => AnimationController(
+        duration: const Duration(seconds: 1),
+        vsync: this,
+      )..repeat(reverse: true),
+    );
+
+    _opacityAnimations = _animationControllers
+        .map(
+          (controller) => Tween<double>(begin: 1.0, end: 0.5).animate(
+            CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+          ),
+        )
+        .toList();
+
+    debugPrint('Initial opacityValues: $opacityValues');
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _animationControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _showDescription(String description, String title) {
+    debugPrint("Menampilkan deskripsi: $description");
+    showDialog(
+      context: context,
+      builder: (context) => LessonDialog(
+        description: description,
+        title: title,
+      ),
+    );
+  }
+
+  void _onPointClicked(int index) {
+    if (!clickedPoints[index]) {
+      setState(() {
+        opacityValues[index] = 1.0;
+        clickedPoints[index] = true;
+      });
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _animationControllers[index].stop();
+
+        _showDescription(points[index].description, points[index].title);
+      });
+    } else {
+      _showDescription(points[index].description, points[index].title);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +124,62 @@ class PotentialEnergyLessonScreen extends StatelessWidget {
                     "Energi adalah sesuatu yang sangat melekat dalam setiap aktivitas kehidupan. Secara sederhana, energi dapat diartikan sebagai kemampuan suau benda untuk melakukan suatu usaha. Suatu benda dikatakan memiliki energi ketika benda tersebut mampu menghasilkan gaya yang dapat melakukan kerja. Ada tiga jenis energi, yaitu energi potensial, energi mekanik, dan energi kinetik",
               ),
               const SizedBox(height: 16),
-              Image.asset(
-                'assets/lesson/img_potential_energy.png',
-                width: 400,
-                height: 300,
-                fit: BoxFit.contain,
+              Center(
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      'assets/lesson/img_potential_energy.png',
+                      width: 400,
+                      height: 350,
+                      fit: BoxFit.contain,
+                    ),
+                    Positioned.fill(
+                      child: AnimatedBuilder(
+                        animation: Listenable.merge(_animationControllers),
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: VerticalLinePainter(
+                              points: points,
+                              opacityValues: _opacityAnimations
+                                  .map((anim) => anim.value)
+                                  .toList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    ...points.asMap().map((index, point) {
+                      final Offset endPosition = Offset(
+                        point.position.dx,
+                        point.position.dy + point.lineLength,
+                      );
+
+                      return MapEntry(
+                        index,
+                        Positioned(
+                          left: endPosition.dx - 10,
+                          top: endPosition.dy - 0,
+                          child: FadeTransition(
+                            opacity: _opacityAnimations[index],
+                            child: GestureDetector(
+                              onTap: () {
+                                _onPointClicked(index);
+                              },
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).values
+                  ],
+                ),
               ),
               const SubtitleWithDescription(
                 subtitle: "Energi Potensial Gravitasi",
