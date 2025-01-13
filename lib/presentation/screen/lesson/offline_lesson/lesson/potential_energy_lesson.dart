@@ -26,7 +26,7 @@ class _PotentialEnergyLessonScreenState
     ),
     InteractivePoint(
       position: const Offset(134.5, 105),
-      lineLength: 170,
+      lineLength: 140,
       title: "Percepatan Gravitasi",
       description: '',
     ),
