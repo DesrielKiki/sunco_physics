@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:sunco_physics/presentation/component/output_calculator.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
-class PotentialEnergyCalculatorScreen extends StatefulWidget {
-  const PotentialEnergyCalculatorScreen({super.key});
+class FrictionForceCalculatorScreen extends StatefulWidget {
+  const FrictionForceCalculatorScreen({super.key});
 
   @override
-  State<PotentialEnergyCalculatorScreen> createState() =>
-      _PotentialEnergyCalculatorScreenState();
+  State<FrictionForceCalculatorScreen> createState() =>
+      _FrictionForceCalculatorScreenState();
 }
 
-class _PotentialEnergyCalculatorScreenState
-    extends State<PotentialEnergyCalculatorScreen>
-    with TickerProviderStateMixin {
-  final TextEditingController _massaController = TextEditingController();
-  final TextEditingController _ketinggianController = TextEditingController();
-  double _selectedGravitasi = 9.8;
+class _FrictionForceCalculatorScreenState
+    extends State<FrictionForceCalculatorScreen> with TickerProviderStateMixin {
+  final TextEditingController _normalForceController = TextEditingController();
+  final TextEditingController _coefficientController = TextEditingController();
+  bool isStaticFriction = true; // Default: Static Friction
 
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -29,8 +28,8 @@ class _PotentialEnergyCalculatorScreenState
 
   void _resetFields() {
     setState(() {
-      _massaController.clear();
-      _ketinggianController.clear();
+      _normalForceController.clear();
+      _coefficientController.clear();
       _known = null;
       _asked = null;
       _answer = null;
@@ -38,21 +37,21 @@ class _PotentialEnergyCalculatorScreenState
     });
   }
 
-  void _calculateEnergy() {
-    final double? massa = double.tryParse(_massaController.text);
-    final double? ketinggian = double.tryParse(_ketinggianController.text);
+  void _calculateFrictionForce() {
+    final double? normalForce = double.tryParse(_normalForceController.text);
+    final double? coefficient = double.tryParse(_coefficientController.text);
 
-    if (massa != null && ketinggian != null) {
-      final double energiPotensial = massa * _selectedGravitasi * ketinggian;
-
+    if (normalForce != null && coefficient != null) {
+      final double frictionForce = coefficient * normalForce;
       setState(
         () {
           _known =
-              "Massa (m) = $massa kg\nGravitasi (g) = $_selectedGravitasi m/s²\nKetinggian (h) = $ketinggian m";
-          _asked = "Energi potensial (Ep)";
+              "Gaya sNormal (N) = $normalForce\nKoefisien gesek${isStaticFriction ? ' µₛ' : ' µₖ'} = $coefficient";
+          _asked = isStaticFriction ? 'µₛ = . . . ?' : 'µₖ = . . . ?';
           _answer =
-              "Ep = m × g × h\nEp = $massa × $_selectedGravitasi × $ketinggian\nEp = $energiPotensial Joule";
-          _conclusion = "Energi potensial benda adalah $energiPotensial Joule.";
+              '${isStaticFriction ? 'fs' : 'fk'} = ${isStaticFriction ? 'μs' : 'μk'} × N= ${coefficient.toStringAsFixed(2)} × ${normalForce.toStringAsFixed(2)}= ${frictionForce.toStringAsFixed(2)} Newton';
+          _conclusion =
+              "sehingga gaya gesek ${isStaticFriction ? 'µₛ' : 'µₖ'} adalah $frictionForce Newton";
         },
       );
     } else {
@@ -103,7 +102,7 @@ class _PotentialEnergyCalculatorScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Navigasi kembali ke layar sebelumnya
+            Navigator.pop(context);
           },
         ),
         title: Column(
@@ -112,7 +111,7 @@ class _PotentialEnergyCalculatorScreenState
             FadeTransition(
               opacity: _opacityAnimation,
               child: const Text(
-                'KALKULATOR',
+                'CALCULATOR',
                 style: TextStyle(
                   fontSize: 32,
                   color: Colors.white,
@@ -124,7 +123,7 @@ class _PotentialEnergyCalculatorScreenState
             FadeTransition(
               opacity: _opacityAnimation,
               child: const Text(
-                'Energi Potensial',
+                'Friction Force',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -173,16 +172,6 @@ class _PotentialEnergyCalculatorScreenState
                           width: double.infinity,
                           height: 45,
                           color: ColorConfig.darkBlue,
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).padding.top,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     );
@@ -196,51 +185,46 @@ class _PotentialEnergyCalculatorScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildInputField(
-                    label: 'Massa (m) :',
-                    controller: _massaController,
-                    hint: 'Masukkan angka',
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Percepatan Gravitasi (g) :',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Row(
-                    children: [
-                      Radio<double>(
-                        value: 9.8,
-                        groupValue: _selectedGravitasi,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGravitasi = value!;
-                          });
-                        },
-                      ),
-                      const Text(
-                        '9.8 m/s²',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                      Radio<double>(
-                        value: 10.0,
-                        groupValue: _selectedGravitasi,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGravitasi = value!;
-                          });
-                        },
-                      ),
-                      const Text(
-                        '10 m/s²',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ],
+                  Center(
+                    child: ToggleButtons(
+                      isSelected: [isStaticFriction, !isStaticFriction],
+                      onPressed: (int index) {
+                        setState(() {
+                          isStaticFriction = index == 0;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(10.0),
+                      selectedColor: Colors.white,
+                      fillColor: Colors.blue,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            'Static',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            'Kinetic',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 10),
                   _buildInputField(
-                    label: 'Ketinggian (h) :',
-                    controller: _ketinggianController,
-                    hint: 'Masukkan angka',
+                    label: 'Coefficient (${isStaticFriction ? 'µₛ' : 'µₖ'}):',
+                    controller: _coefficientController,
+                    hint: 'Enter coefficient',
+                  ),
+                  const SizedBox(height: 10),
+                  _buildInputField(
+                    label: 'Normal Force (N):',
+                    controller: _normalForceController,
+                    hint: 'Enter normal force (N)',
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -249,49 +233,37 @@ class _PotentialEnergyCalculatorScreenState
                       ElevatedButton(
                         onPressed: _resetFields,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorConfig.darkBlue,
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 38.0, vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                              style: BorderStyle.solid,
-                            ),
                           ),
                         ),
                         child: const Text(
                           'Reset',
                           style: TextStyle(
                             fontSize: 20,
-                            color: ColorConfig.onPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: _calculateEnergy,
+                        onPressed: _calculateFrictionForce,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorConfig.darkBlue,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 38.0, vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
-                            side: const BorderSide(
-                              color: Colors.white,
-                              width: 2.0,
-                              style: BorderStyle.solid,
-                            ),
                           ),
                         ),
                         child: const Text(
-                          'Hitung',
+                          'Count',
                           style: TextStyle(
                             fontSize: 20,
-                            color: ColorConfig.onPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -302,7 +274,7 @@ class _PotentialEnergyCalculatorScreenState
                   Container(
                     width: double.infinity,
                     color: Colors.grey.shade300,
-                    child: _answer != null
+                    child: _conclusion != null
                         ? OutputCalculator(
                             known: _known ?? '',
                             asked: _asked ?? '',
@@ -310,7 +282,7 @@ class _PotentialEnergyCalculatorScreenState
                             conclusion: _conclusion ?? '',
                           )
                         : const SizedBox(
-                            height: 100,
+                            height: 200,
                             width: double.infinity,
                           ),
                   ),
@@ -321,16 +293,16 @@ class _PotentialEnergyCalculatorScreenState
                     color: Colors.grey.shade300,
                     child: Column(
                       children: [
-                        const Text(
-                          'Ep = m × g × h',
-                          style: TextStyle(
+                        Text(
+                          isStaticFriction ? 'fₛ = µₛ × N' : 'fₖ = µₖ × N',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Energi potensial adalah energi yang dimiliki suatu benda karena kedudukan atau posisinya terhadap suatu titik acuan. Energi potensial juga dikenal sebagai energi diam karena benda yang diam bisa memiliki energi.',
+                          'Gaya gesek adalah resistensi yang terjadi saat dua permukaan saling bersentuhan. Gaya gesek terdiri dari dua jenis, yaitu gaya gesek statis dan gaya gesek kinetis.',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 16),
                         ),
