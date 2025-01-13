@@ -3,6 +3,7 @@ import 'package:sunco_physics/data/model/interactive_point.dart';
 import 'package:sunco_physics/presentation/component/bullet_point_list.dart';
 import 'package:sunco_physics/presentation/component/formula_text.dart';
 import 'package:sunco_physics/presentation/component/lesson_dialog.dart';
+import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/component/vertical_line_painter.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -16,23 +17,41 @@ class SpringLessonScreen extends StatefulWidget {
 
 class _SpringLessonScreenState extends State<SpringLessonScreen>
     with TickerProviderStateMixin {
-  final List<InteractivePoint> points = [
+  final List<InteractivePoint> points1 = [
     InteractivePoint(
-      position: const Offset(150, 195),
-      lineLength: 65,
+      position: const Offset(120, 145),
+      lineLength: 115,
       title: "Massa",
       description:
           'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',
     ),
     InteractivePoint(
-        position: const Offset(200, 125),
-        lineLength: 135,
+        position: const Offset(225, 200),
+        lineLength: 60,
         title: "Koefisien Gaya Gesek",
         description: ''),
   ];
+  final List<InteractivePoint> points2 = [
+    InteractivePoint(
+      position: const Offset(150, 200),
+      lineLength: 65,
+      title: "Panjang Pegas Awal",
+      description:
+          'Panjang mula-mula pegas sebelum mendapat gaya atau dengan kata lain panjang pegas asli',
+    ),
+    InteractivePoint(
+      position: const Offset(220, 80),
+      lineLength: 185,
+      title: "Panjang Pegas Akhir",
+      description:
+          'Panjang akhir pegas setelah mendapat gaya atau dengan kata lain panjang pegas akhir',
+    ),
+  ];
 
-  late List<AnimationController> _animationControllers;
-  late List<Animation<double>> _opacityAnimations;
+  late List<AnimationController> _animationControllers1;
+  late List<AnimationController> _animationControllers2;
+  late List<Animation<double>> _opacityAnimations1;
+  late List<Animation<double>> _opacityAnimations2;
   late List<bool> clickedPoints;
   late List<double> opacityValues;
 
@@ -40,18 +59,34 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
   void initState() {
     super.initState();
 
-    clickedPoints = List.generate(points.length, (_) => false);
-    opacityValues = List.generate(points.length, (_) => 1.0);
+    clickedPoints = List.generate(points1.length, (_) => false);
+    opacityValues = List.generate(points1.length, (_) => 1.0);
+    clickedPoints = List.generate(points2.length, (_) => false);
+    opacityValues = List.generate(points2.length, (_) => 1.0);
 
-    _animationControllers = List.generate(
-      points.length,
+    _animationControllers1 = List.generate(
+      points1.length,
+      (_) => AnimationController(
+        duration: const Duration(seconds: 1),
+        vsync: this,
+      )..repeat(reverse: true),
+    );
+    _animationControllers2 = List.generate(
+      points2.length,
       (_) => AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
       )..repeat(reverse: true),
     );
 
-    _opacityAnimations = _animationControllers
+    _opacityAnimations1 = _animationControllers1
+        .map(
+          (controller) => Tween<double>(begin: 1.0, end: 0.5).animate(
+            CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+          ),
+        )
+        .toList();
+    _opacityAnimations2 = _animationControllers2
         .map(
           (controller) => Tween<double>(begin: 1.0, end: 0.5).animate(
             CurvedAnimation(parent: controller, curve: Curves.easeInOut),
@@ -64,7 +99,10 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
 
   @override
   void dispose() {
-    for (var controller in _animationControllers) {
+    for (var controller in _animationControllers1) {
+      controller.dispose();
+    }
+    for (var controller in _animationControllers2) {
       controller.dispose();
     }
     super.dispose();
@@ -81,7 +119,7 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
     );
   }
 
-  void _onPointClicked(int index) {
+  void _onPoint1Clicked(int index) {
     if (!clickedPoints[index]) {
       setState(() {
         opacityValues[index] = 1.0;
@@ -89,12 +127,29 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
       });
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        _animationControllers[index].stop();
+        _animationControllers1[index].stop();
 
-        _showDescription(points[index].description, points[index].title);
+        _showDescription(points1[index].description, points1[index].title);
       });
     } else {
-      _showDescription(points[index].description, points[index].title);
+      _showDescription(points1[index].description, points1[index].title);
+    }
+  }
+
+  void _onPoint2Clicked(int index) {
+    if (!clickedPoints[index]) {
+      setState(() {
+        opacityValues[index] = 1.0;
+        clickedPoints[index] = true;
+      });
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _animationControllers2[index].stop();
+
+        _showDescription(points2[index].description, points2[index].title);
+      });
+    } else {
+      _showDescription(points2[index].description, points2[index].title);
     }
   }
 
@@ -131,12 +186,12 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
                     ),
                     Positioned.fill(
                       child: AnimatedBuilder(
-                        animation: Listenable.merge(_animationControllers),
+                        animation: Listenable.merge(_animationControllers1),
                         builder: (context, child) {
                           return CustomPaint(
                             painter: VerticalLinePainter(
-                              points: points,
-                              opacityValues: _opacityAnimations
+                              points: points1,
+                              opacityValues: _opacityAnimations1
                                   .map((anim) => anim.value)
                                   .toList(),
                             ),
@@ -144,7 +199,7 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
                         },
                       ),
                     ),
-                    ...points.asMap().map((index, point) {
+                    ...points1.asMap().map((index, point) {
                       final Offset endPosition = Offset(
                         point.position.dx,
                         point.position.dy + point.lineLength,
@@ -156,10 +211,10 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
                           left: endPosition.dx - 10,
                           top: endPosition.dy - 0,
                           child: FadeTransition(
-                            opacity: _opacityAnimations[index],
+                            opacity: _opacityAnimations1[index],
                             child: GestureDetector(
                               onTap: () {
-                                _onPointClicked(index);
+                                _onPoint1Clicked(index);
                               },
                               child: Container(
                                 width: 20,
@@ -211,9 +266,61 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
                     'Gaya pegas didefinisikan dalam hukum hooke. Hukum hooke juga dihitung dan mendapat angka untuk mendefinisikan gaya tersebut. Berikut ini penulisan sistematis rumus gaya pegas:',
               ),
               const SizedBox(height: 16),
-              const Image(
-                image: AssetImage(
-                  'assets/lesson/img_spring_2.png',
+              Center(
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      'assets/lesson/img_spring_2.png',
+                      width: 400,
+                      height: 300,
+                      fit: BoxFit.contain,
+                    ),
+                    Positioned.fill(
+                      child: AnimatedBuilder(
+                        animation: Listenable.merge(_animationControllers2),
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: VerticalLinePainter(
+                              points: points2,
+                              opacityValues: _opacityAnimations2
+                                  .map((anim) => anim.value)
+                                  .toList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    ...points2.asMap().map((index, point) {
+                      final Offset endPosition = Offset(
+                        point.position.dx,
+                        point.position.dy + point.lineLength,
+                      );
+
+                      return MapEntry(
+                        index,
+                        Positioned(
+                          left: endPosition.dx - 10,
+                          top: endPosition.dy - 0,
+                          child: FadeTransition(
+                            opacity: _opacityAnimations2[index],
+                            child: GestureDetector(
+                              onTap: () {
+                                _onPoint2Clicked(index);
+                              },
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).values
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
@@ -252,13 +359,36 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
                     'K = konstanta pegas (N/m)\nEp = energi potensial pegas (J)\nΔx = pertambahan panjang pegas (m)',
               ),
               const SizedBox(height: 16),
-              // QuestionButton(
-              //     title: title,
-              //     question: question,
-              //     known: known,
-              //     asked: asked,
-              //     answer: answer,
-              //     conclusion: conclusion)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Contoh Soal Gaya Pegas",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const QuestionButton(
+                title: "Soal 1",
+                question:
+                    "Setelah diberi gaya sebuah pegas memiliki panjang 50 cm. bila pegas tersebut memiliki kontanta sebesar 600 N.m-1. Maka berapa gaya yang diberikan pada pegas ?",
+                known: "x = 50 cm = 0,5\nmk = 600 N.m‾¹",
+                asked: "F = . . . ?",
+                answer: "F = k.x\nF = 600 N.m‾¹ x (0,5 m)\nF = 300 N",
+                conclusion: "",
+              ),
+              const SizedBox(height: 16),
+              const QuestionButton(
+                title: "Soal 2",
+                question:
+                    "Sebuah pegas membutuhkan gaya 5 N untuk memampatkannya dari panjang 50 cm menjadi 45 cm. Hitunglah konstanta pegas, k",
+                known: "F = 5 N\nΔx = 50-45= 5 cm",
+                asked: "K = . . . ?",
+                answer: "F = k.Δx\n5 = k. 5\nk = 5/5\nk = 1 N/cm = 0,01 N/m",
+                conclusion: "",
+              )
             ],
           ),
         ),

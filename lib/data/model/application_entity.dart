@@ -24,16 +24,6 @@ class ApplicationEntity {
   ///list of Lesson data
   static List<Map<String, dynamic>> lesson = [
     {
-      'title': 'Usaha',
-      'icon': Icons.work,
-      'route': '/workLesson',
-    },
-    {
-      'title': 'Gaya Gesek',
-      'icon': Icons.work,
-      'route': '/frictionLesson',
-    },
-    {
       'title': 'Energi Potensial',
       'icon': Icons.energy_savings_leaf,
       'route': '/potentialEnergyLesson',
@@ -44,34 +34,33 @@ class ApplicationEntity {
       'route': '/kineticEnergyLesson',
     },
     {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
+      'title': 'Gaya Gesek',
+      'icon': Icons.work,
+      'route': '/frictionLesson',
     },
     {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
+      'title': 'Usaha',
+      'icon': Icons.work,
+      'route': '/workLesson',
     },
+    //energi mekanik
     {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
+      'title': 'Katrol',
+      'icon': Icons.turn_sharp_right_outlined,
+      'route': '/pulleyLesson',
     },
+    //?
     {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
+      'title': 'Gaya Pegas',
+      'icon': Icons.turn_sharp_right_outlined,
+      'route': '/springLesson',
     },
-    {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
-    },
-    {
-      'title': 'dummy',
-      'icon': Icons.disabled_by_default,
-      'route': '/default',
-    },
+
+    // static const String potentialEnergyLesson = '/potentialEnergyLesson';
+    // static const String kineticEnergyLesson = '/kineticEnergyLesson';
+    //     static const String workLesson = '/workLesson';
+    // static const String pulleyLesson = '/pulleyLesson';
+    // static const String frictionLesson = '/frictionLesson';
+    // static const String springLesson = '/springLesson';
   ];
 }
