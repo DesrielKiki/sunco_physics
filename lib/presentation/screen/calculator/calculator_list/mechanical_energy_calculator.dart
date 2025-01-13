@@ -293,7 +293,8 @@ class _MechanicalEnergyCalculatorScreenState
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/workLesson");
+                            Navigator.pushNamed(
+                                context, "/mechanicalEnergyLesson");
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,

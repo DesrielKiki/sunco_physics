@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
   ) {
     return MaterialApp(
       title: 'Flutter Demo',
-      // debugShowCheckedModeBanner: false,
-      // initialRoute: AppRoutes.splash,
+       debugShowCheckedModeBanner: false,
+       initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRoutes.generateRoute,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SpringForceCalculatorScreen(),
+     // home: const SpringForceCalculatorScreen(),
     );
   }
 }

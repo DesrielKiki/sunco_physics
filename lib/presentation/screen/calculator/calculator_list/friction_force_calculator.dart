@@ -309,8 +309,7 @@ class _FrictionForceCalculatorScreenState
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, "/potentialEnergyLesson");
+                            Navigator.pushNamed(context, "/frictionLesson");
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,

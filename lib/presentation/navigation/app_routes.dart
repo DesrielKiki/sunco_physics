@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/friction_force_calculator.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/kinetic_energy_calculator._screen.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/mechanical_energy_calculator.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/spring_force_calculator.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/friction_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinematic_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
@@ -34,9 +37,14 @@ class AppRoutes {
   /// Calculator List Route
 
   static const String calculatorList = '/calculatorList';
+
   static const String potentialEnergyCalculator = '/potentialEnergyCalculator';
-  static const String workCalculator = '/workCalculator';
   static const String kineticEnergyCalculator = '/kineticEnergyCalculator';
+  static const String mechanicalEnergyCalculator =
+      '/mechanicalEnergyCalculator';
+  static const String frictionForceCalculator = '/frictionForceCalculator';
+  static const String workCalculator = '/workCalculator';
+  static const String springForceCalculator = '/springForceCalculator';
 
   /// lesson List Route
   static const String offlineLessonList = '/offlineLessonList';
@@ -82,23 +90,40 @@ class AppRoutes {
        * Calculator List Route
        */
 
-      case calculatorList:
-        return MaterialPageRoute(
-          builder: (_) => const CalculatorListScreen(),
-        );
-      case potentialEnergyCalculator:
-        return MaterialPageRoute(
-          builder: (_) => const PotentialEnergyCalculatorScreen(),
-        );
-      case workCalculator:
-        return MaterialPageRoute(
-          builder: (_) =>  WorkCalculatorScreen(),
-        );
       case kineticEnergyCalculator:
         return MaterialPageRoute(
           builder: (_) => const KineticEnergyCalculatorScreen(),
         );
 
+      case mechanicalEnergyCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const MechanicalEnergyCalculatorScreen(),
+        );
+
+      case calculatorList:
+        return MaterialPageRoute(
+          builder: (_) => const CalculatorListScreen(),
+        );
+
+      case potentialEnergyCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const PotentialEnergyCalculatorScreen(),
+        );
+
+      case frictionForceCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const FrictionForceCalculatorScreen(),
+        );
+
+      case workCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const WorkCalculatorScreen(),
+        );
+
+      case springForceCalculator:
+        return MaterialPageRoute(
+          builder: (_) => const SpringForceCalculatorScreen(),
+        );
       /**
        * Lesson menu Route
        */

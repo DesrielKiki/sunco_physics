@@ -10,14 +10,29 @@ class ApplicationEntity {
       'route': '/potentialEnergyCalculator',
     },
     {
+      'title': 'Energi Kinetik',
+      'icon': Icons.energy_savings_leaf,
+      'route': '/kineticEnergyCalculator',
+    },
+    {
+      'title': 'Energi Mekanik',
+      'icon': Icons.energy_savings_leaf,
+      'route': '/mechanicalEnergyCalculator',
+    },
+    {
+      'title': 'Gaya Gesek',
+      'icon': Icons.energy_savings_leaf,
+      'route': '/frictionForceCalculator',
+    },
+    {
       'title': 'Usaha',
       'icon': Icons.work,
       'route': '/workCalculator',
     },
     {
-      'title': 'Energi Kinetik',
+      'title': 'Gaya Pegas',
       'icon': Icons.work,
-      'route': '/kineticEnergyCalculator',
+      'route': '/springForceCalculator',
     },
   ];
 
@@ -67,6 +82,11 @@ class ApplicationEntity {
       'title': 'Vektor',
       'icon': 'assets/lesson/icon/ic_vector.png',
       'route': '/vectorLesson',
+    },
+    {
+      'title': 'materi online',
+      'icon': 'assets/ic_online_lesson.png',
+      'route': '/onlineLessonList',
     },
   ];
 }

@@ -48,7 +48,7 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
             pinned: false,
             snap: true,
             title: const Text(
-              'Offline Lesson',
+              'Materi Offline',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             foregroundColor: Colors.white,

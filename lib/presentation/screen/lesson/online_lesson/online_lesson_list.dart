@@ -98,7 +98,7 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConfig.primaryColor,
-        title: const Text('Material Physics'),
+        title: const Text('Materi Online'),
         foregroundColor: ColorConfig.onPrimaryColor,
       ),
       floatingActionButton: isAdmin

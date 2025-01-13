@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/presentation/screen/history/history_screen.dart';
+//import 'package:sunco_physics/presentation/screen/history/history_screen.dart';
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/screen/profile/profile_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -17,8 +17,8 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
 
   final List<Widget> _pages = <Widget>[
     const HomeScreen(),
-    const HistoryScreen(),
     const ProfileScreen(),
+    // const HistoryScreen(),
   ];
 
   void _onPageChanged(int index) {
@@ -82,21 +82,12 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(
-                          Icons.history,
+                          Icons.person,
                           color: selectedIndex == 1
                               ? ColorConfig.onPrimaryColor
                               : ColorConfig.grey,
                         ),
-                        label: selectedIndex == 1 ? 'History' : '',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.person,
-                          color: selectedIndex == 2
-                              ? ColorConfig.onPrimaryColor
-                              : ColorConfig.grey,
-                        ),
-                        label: selectedIndex == 2 ? 'Profile' : '',
+                        label: selectedIndex == 1 ? 'Profile' : '',
                       ),
                     ],
                     selectedItemColor: ColorConfig.onPrimaryColor,
