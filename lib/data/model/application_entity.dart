@@ -25,56 +25,48 @@ class ApplicationEntity {
   static List<Map<String, dynamic>> lesson = [
     {
       'title': 'Energi Potensial',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_potential_energy.png',
       'route': '/potentialEnergyLesson',
     },
     {
       'title': 'Energi Kinetik',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_kinetic_energy.png',
       'route': '/kineticEnergyLesson',
     },
     {
       'title': 'Energi Mekanik',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_mechanical_energy.png',
       'route': '/mechanicalEnergyLesson',
     },
     {
       'title': 'Gaya Gesek',
-      'icon': Icons.work,
+      'icon': 'assets/lesson/icon/ic_friction.png',
       'route': '/frictionLesson',
     },
     {
       'title': 'Usaha',
-      'icon': Icons.work,
+      'icon': 'assets/lesson/icon/ic_work.png',
       'route': '/workLesson',
     },
     {
       'title': 'Katrol',
-      'icon': Icons.turn_sharp_right_outlined,
+      'icon': 'assets/lesson/icon/ic_pulley.png',
       'route': '/pulleyLesson',
     },
-
     {
       'title': 'kinematik',
-      'icon': Icons.turn_sharp_right_outlined,
+      'icon': 'assets/lesson/icon/ic_kinematic.png',
       'route': '/kinematicLesson',
     },
     {
       'title': 'Gaya Pegas',
-      'icon': Icons.turn_sharp_right_outlined,
+      'icon': 'assets/lesson/icon/ic_spring.png',
       'route': '/springLesson',
     },
     {
       'title': 'Vektor',
-      'icon': Icons.turn_sharp_right_outlined,
+      'icon': 'assets/lesson/icon/ic_vector.png',
       'route': '/vectorLesson',
     },
-
-    // static const String potentialEnergyLesson = '/potentialEnergyLesson';
-    // static const String kineticEnergyLesson = '/kineticEnergyLesson';
-    //     static const String workLesson = '/workLesson';
-    // static const String pulleyLesson = '/pulleyLesson';
-    // static const String frictionLesson = '/frictionLesson';
-    // static const String springLesson = '/springLesson';
   ];
 }

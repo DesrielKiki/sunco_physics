@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sunco_physics/data/model/application_entity.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -14,29 +13,11 @@ class OfflineLessonListScreen extends StatefulWidget {
 class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredLessons = ApplicationEntity.lesson;
-  String _searchText = '';
-  bool isAdmin = false;
-
-  void _checkAdminStatus() async {
-    User? user = FirebaseAuth
-        .instance.currentUser; // Dapatkan pengguna yang sedang login
-    if (user != null && user.email == 'admin@gmail.com') {
-      setState(() {
-        isAdmin =
-            true; // Jika email pengguna adalah admin, set isAdmin menjadi true
-      });
-    } else {
-      setState(() {
-        isAdmin = false; // Jika bukan admin, set isAdmin menjadi false
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    _checkAdminStatus();
   }
 
   @override
@@ -48,8 +29,6 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
 
   void _onSearchChanged() {
     setState(() {
-      _searchText = _searchController.text;
-
       _filteredLessons = ApplicationEntity.lesson
           .where((lesson) => lesson['title']!
               .toLowerCase()
@@ -61,49 +40,53 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorConfig.primaryColor,
-        title: const Text('Material Physics'),
-        foregroundColor: ColorConfig.onPrimaryColor,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search Material',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: _searchText.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() {
-                              _filteredLessons = ApplicationEntity.lesson;
-                            });
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: Colors.grey.shade200,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: ColorConfig.primaryColor,
+            floating: true,
+            pinned: false,
+            snap: true,
+            title: const Text(
+              'Offline Lesson',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            foregroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+            expandedHeight: 120.0, // Tinggi AppBar termasuk Search Bar
+            flexibleSpace: FlexibleSpaceBar(
+              background: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search calculators',
+                        prefixIcon: const Icon(Icons.search),
+                        filled: true,
+                        fillColor: Colors.white, // Tetap putih
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 8), // Jarak dengan list
+                ],
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: LessonGrid(filteredLessons: _filteredLessons),
-              ),
-            ),
-          ],
-        ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(12.0),
+            sliver: LessonGrid(filteredLessons: _filteredLessons),
+          ),
+        ],
       ),
     );
   }
@@ -119,80 +102,80 @@ class LessonGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return filteredLessons.isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/ic_notfound.png', height: 120),
-                const SizedBox(height: 16),
-                const Text(
-                  "Material Not Found",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+    if (filteredLessons.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/ic_notfound.png', height: 120),
+              const SizedBox(height: 16),
+              const Text(
+                "Calculator Not Found",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          )
-        : Padding(
-            padding: const EdgeInsets.only(top: 32),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 1,
-                mainAxisSpacing: 1,
-                childAspectRatio: 1,
               ),
-              itemCount: filteredLessons.length,
-              itemBuilder: (context, index) {
-                final lesson = filteredLessons[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, lesson['route'] as String);
-                  },
-                  child: Center(
+            ],
+          ),
+        ),
+      );
+    } else {
+      return SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final lesson = filteredLessons[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, lesson['route'] as String);
+              },
+              child: Column(
+                children: [
+                  Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      color: ColorConfig.primaryColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 136,
-                          height: 136,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: ColorConfig.gradientBrandReverse,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  lesson['icon'] as IconData,
-                                  size: 64,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(height: 6),
-                              ],
-                            ),
-                          ),
+                        Image(
+                          image: AssetImage(lesson['icon'] as String),
+                          width: 81,
+                          height: 81,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           lesson['title'] as String,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
+                            color: ColorConfig.onPrimaryColor,
                             fontWeight: FontWeight.w500,
-                            color: ColorConfig.black,
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              },
-            ),
-          );
+                  const SizedBox(height: 8),
+                ],
+              ),
+            );
+          },
+          childCount: filteredLessons.length,
+        ),
+      );
+    }
   }
 }
