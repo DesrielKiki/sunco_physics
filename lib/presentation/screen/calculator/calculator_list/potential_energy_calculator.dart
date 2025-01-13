@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/component/output_calculator.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class PotentialEnergyCalculatorScreen extends StatefulWidget {
@@ -22,11 +23,19 @@ class _PotentialEnergyCalculatorScreenState
   late Animation<double> _shadowAnimation;
   late Animation<double> _opacityAnimation;
 
+  String? _known;
+  String? _asked;
+  String? _answer;
+  String? _conclusion;
+
   void _resetFields() {
     setState(() {
       _massaController.clear();
       _ketinggianController.clear();
-      _result = '';
+      _known = null;
+      _asked = null;
+      _answer = null;
+      _conclusion = null;
     });
   }
 
@@ -36,12 +45,23 @@ class _PotentialEnergyCalculatorScreenState
 
     if (massa != null && ketinggian != null) {
       final double energiPotensial = massa * _selectedGravitasi * ketinggian;
-      setState(() {
-        _result = 'Energi Potensial: $energiPotensial Joule';
-      });
+
+      setState(
+        () {
+          _known =
+              "Massa (m) = $massa kg\nGravitasi (g) = $_selectedGravitasi m/s²\nKetinggian (h) = $ketinggian m";
+          _asked = "Energi potensial (Ep)";
+          _answer =
+              "Ep = m × g × h\nEp = $massa × $_selectedGravitasi × $ketinggian\nEp = $energiPotensial Joule";
+          _conclusion = "Energi potensial benda adalah $energiPotensial Joule.";
+        },
+      );
     } else {
       setState(() {
-        _result = 'Input tidak valid!';
+        _known = null;
+        _asked = null;
+        _answer = null;
+        _conclusion = null;
       });
     }
   }
@@ -280,6 +300,21 @@ class _PotentialEnergyCalculatorScreenState
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    color: Colors.grey.shade300,
+                    child: _answer != null
+                        ? OutputCalculator(
+                            known: _known ?? '',
+                            asked: _asked ?? '',
+                            answer: _answer ?? '',
+                            conclusion: _conclusion ?? '',
+                          )
+                        : const SizedBox(
+                            height: 100,
+                            width: double.infinity,
+                          ),
+                  ),
                   Container(
                     width: double.infinity,
                     height: 100,
