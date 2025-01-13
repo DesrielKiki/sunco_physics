@@ -5,6 +5,7 @@ import 'package:sunco_physics/presentation/navigation/app_routes.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/friction_force_calculator.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/kinetic_energy_calculator._screen.dart';
 import 'package:sunco_physics/presentation/screen/calculator/calculator_list/mechanical_energy_calculator.dart';
+import 'package:sunco_physics/presentation/screen/calculator/calculator_list/spring_force_calculator.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinematic_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/kinetic_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/mechanical_energy_lesson.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MechanicalEnergyCalculatorScreen(),
+      home: const SpringForceCalculatorScreen(),
     );
   }
 }
