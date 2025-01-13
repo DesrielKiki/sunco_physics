@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sunco_physics/presentation/component/formula_text.dart';
 import 'package:sunco_physics/presentation/component/question_button.dart';
 import 'package:sunco_physics/presentation/component/subtitle_with_description.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
