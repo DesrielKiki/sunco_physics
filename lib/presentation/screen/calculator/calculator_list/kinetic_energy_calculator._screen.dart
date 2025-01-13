@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/component/output_calculator.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class KineticEnergyCalculatorScreen extends StatefulWidget {
@@ -11,35 +12,50 @@ class KineticEnergyCalculatorScreen extends StatefulWidget {
 
 class _KineticEnergyCalculatorScreenState
     extends State<KineticEnergyCalculatorScreen> with TickerProviderStateMixin {
-  final TextEditingController _massController = TextEditingController();
-  final TextEditingController _speedController = TextEditingController();
-  String _result = '';
+  final TextEditingController _massaController = TextEditingController();
+  final TextEditingController _kecepatanController = TextEditingController();
 
   late AnimationController _animationController;
   late Animation<double> _animation;
   late Animation<double> _shadowAnimation;
   late Animation<double> _opacityAnimation;
 
+  String? _known;
+  String? _asked;
+  String? _answer;
+  String? _conclusion;
+
   void _resetFields() {
     setState(() {
-      _massController.clear();
-      _speedController.clear();
-      _result = '';
+      _massaController.clear();
+      _kecepatanController.clear();
+      _known = null;
+      _asked = null;
+      _answer = null;
+      _conclusion = null;
     });
   }
 
-  void _calculateKineticEnergy() {
-    final double? mass = double.tryParse(_massController.text);
-    final double? speed = double.tryParse(_speedController.text);
+  void _calculateEnergy() {
+    final double? massa = double.tryParse(_massaController.text);
+    final double? kecepatan = double.tryParse(_kecepatanController.text);
 
-    if (mass != null && speed != null) {
-      final double kineticEnergy = 0.5 * mass * speed * speed;
+    if (massa != null && kecepatan != null) {
+      final double energiKinetik = 0.5 * massa * kecepatan * kecepatan;
+
       setState(() {
-        _result = 'Energi Kinetik: ${kineticEnergy.toStringAsFixed(2)} Joule';
+        _known = "Massa (m) = $massa kg\nKecepatan (v) = $kecepatan m/s";
+        _asked = "Energi kinetik (Ek)";
+        _answer =
+            "Ek = ½ × m × v²\nEk = ½ × $massa × $kecepatan²\nEk = $energiKinetik Joule";
+        _conclusion = "Energi kinetik benda adalah $energiKinetik Joule.";
       });
     } else {
       setState(() {
-        _result = 'Input tidak valid!';
+        _known = null;
+        _asked = null;
+        _answer = null;
+        _conclusion = null;
       });
     }
   }
@@ -91,7 +107,7 @@ class _KineticEnergyCalculatorScreenState
             FadeTransition(
               opacity: _opacityAnimation,
               child: const Text(
-                'CALCULATOR',
+                'KALKULATOR',
                 style: TextStyle(
                   fontSize: 32,
                   color: Colors.white,
@@ -103,7 +119,7 @@ class _KineticEnergyCalculatorScreenState
             FadeTransition(
               opacity: _opacityAnimation,
               child: const Text(
-                'Kinetic Energy',
+                'Energi Kinetik',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -166,15 +182,15 @@ class _KineticEnergyCalculatorScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildInputField(
-                    label: 'Mass (m) :',
-                    controller: _massController,
-                    hint: 'Enter numbers (kg)',
+                    label: 'Massa (m) :',
+                    controller: _massaController,
+                    hint: 'Masukkan angka',
                   ),
                   const SizedBox(height: 10),
                   _buildInputField(
-                    label: 'Speed (v) :',
-                    controller: _speedController,
-                    hint: 'Enter numbers (m/s)',
+                    label: 'Kecepatan (v) :',
+                    controller: _kecepatanController,
+                    hint: 'Masukkan angka',
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -183,37 +199,49 @@ class _KineticEnergyCalculatorScreenState
                       ElevatedButton(
                         onPressed: _resetFields,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
+                          backgroundColor: ColorConfig.darkBlue,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 38.0, vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                              style: BorderStyle.solid,
+                            ),
                           ),
                         ),
                         child: const Text(
                           'Reset',
                           style: TextStyle(
                             fontSize: 20,
+                            color: ColorConfig.onPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: _calculateKineticEnergy,
+                        onPressed: _calculateEnergy,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: ColorConfig.darkBlue,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 38.0, vertical: 12.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                              style: BorderStyle.solid,
+                            ),
                           ),
                         ),
                         child: const Text(
-                          'Count',
+                          'Hitung',
                           style: TextStyle(
                             fontSize: 20,
+                            color: ColorConfig.onPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -223,15 +251,18 @@ class _KineticEnergyCalculatorScreenState
                   const SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    height: 100,
                     color: Colors.grey.shade300,
-                    child: Center(
-                      child: Text(
-                        _result,
-                        style: const TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    child: _answer != null
+                        ? OutputCalculator(
+                            known: _known ?? '',
+                            asked: _asked ?? '',
+                            answer: _answer ?? '',
+                            conclusion: _conclusion ?? '',
+                          )
+                        : const SizedBox(
+                            height: 100,
+                            width: double.infinity,
+                          ),
                   ),
                   const SizedBox(height: 20),
                   Container(
@@ -241,7 +272,7 @@ class _KineticEnergyCalculatorScreenState
                     child: Column(
                       children: [
                         const Text(
-                          'Ek = 1/2 × m × v²',
+                          'Ek = 1/2 x m x v2',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -249,13 +280,15 @@ class _KineticEnergyCalculatorScreenState
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Energi kinetik adalah energi yang dimiliki oleh benda karena gerakannya.',
+                          'Energi kinetik adalah energi yang dimiliki oleh suatu benda karena gerak yang dilakukan atau dialaminya. Semua benda yang bergerak memiliki energi kinetik. Energi kinetik dipengaruhi oleh massa dan kecepatan suatu benda saat bergerak',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 16),
                         ),
+                        const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/workLesson");
+                            Navigator.pushNamed(
+                                context, "/kineticEnergyLesson");
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
