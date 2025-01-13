@@ -7,6 +7,7 @@ import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/k
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/mechanical_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/potential_energy_lesson.dart';
 import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/spring_lesson.dart';
+import 'package:sunco_physics/presentation/screen/lesson/offline_lesson/lesson/vector_lesson.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const KinematicLesson(),
+      home: const VectorLesson(),
     );
   }
 }
