@@ -59,13 +59,13 @@ class _GenderDropdownState extends State<GenderDropdown> {
             children: [
               Icon(
                 option['icon'],
-                color: ColorConfig.primaryColor, // Warna ikon
+                color: ColorConfig.primaryColor,
               ),
-              const SizedBox(width: 10), // Jarak antara ikon dan teks
+              const SizedBox(width: 10),
               Text(
                 option['label'],
                 style: const TextStyle(
-                  color: ColorConfig.black, // Warna teks
+                  color: ColorConfig.black,
                 ),
               ),
             ],

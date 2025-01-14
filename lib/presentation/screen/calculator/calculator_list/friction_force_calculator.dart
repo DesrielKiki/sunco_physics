@@ -14,7 +14,7 @@ class _FrictionForceCalculatorScreenState
     extends State<FrictionForceCalculatorScreen> with TickerProviderStateMixin {
   final TextEditingController _normalForceController = TextEditingController();
   final TextEditingController _coefficientController = TextEditingController();
-  bool isStaticFriction = true; // Default: Static Friction
+  bool isStaticFriction = true;
 
   late AnimationController _animationController;
   late Animation<double> _animation;

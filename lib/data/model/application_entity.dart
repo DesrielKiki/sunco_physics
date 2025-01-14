@@ -1,42 +1,37 @@
-import 'package:flutter/material.dart';
-
 class ApplicationEntity {
-  /// List of calculator data
-
   static List<Map<String, dynamic>> calculator = [
     {
       'title': 'Energi Potensial',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_potential_energy.png',
       'route': '/potentialEnergyCalculator',
     },
     {
       'title': 'Energi Kinetik',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_kinetic_energy.png',
       'route': '/kineticEnergyCalculator',
     },
     {
       'title': 'Energi Mekanik',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_mechanical_energy.png',
       'route': '/mechanicalEnergyCalculator',
     },
     {
       'title': 'Gaya Gesek',
-      'icon': Icons.energy_savings_leaf,
+      'icon': 'assets/lesson/icon/ic_friction.png',
       'route': '/frictionForceCalculator',
     },
     {
       'title': 'Usaha',
-      'icon': Icons.work,
+      'icon': 'assets/lesson/icon/ic_work.png',
       'route': '/workCalculator',
     },
     {
       'title': 'Gaya Pegas',
-      'icon': Icons.work,
+      'icon': 'assets/lesson/icon/ic_spring.png',
       'route': '/springForceCalculator',
     },
   ];
 
-  ///list of Lesson data
   static List<Map<String, dynamic>> lesson = [
     {
       'title': 'Energi Potensial',

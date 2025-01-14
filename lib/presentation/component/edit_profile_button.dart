@@ -18,7 +18,7 @@ class EditProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // Memastikan tombol memenuhi lebar layar
+      width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -31,8 +31,7 @@ class EditProfileButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: Row(
-            mainAxisAlignment:
-                MainAxisAlignment.spaceBetween, // Mengatur ikon di kanan
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 buttonText,

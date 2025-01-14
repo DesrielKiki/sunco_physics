@@ -103,7 +103,7 @@ class _PotentialEnergyCalculatorScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Navigasi kembali ke layar sebelumnya
+            Navigator.pop(context);
           },
         ),
         title: Column(

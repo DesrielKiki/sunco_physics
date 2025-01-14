@@ -49,7 +49,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         password: password,
       );
 
-      // Reauthenticate user to verify password
       await user.reauthenticateWithCredential(credential);
       return true;
     } catch (e) {

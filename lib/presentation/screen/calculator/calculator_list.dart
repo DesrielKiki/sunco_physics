@@ -55,7 +55,7 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
               ),
             ),
             foregroundColor: Colors.white,
-            expandedHeight: 120.0, // Tinggi AppBar + Search Bar
+            expandedHeight: 120.0,
             flexibleSpace: FlexibleSpaceBar(
               background: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -68,7 +68,7 @@ class _CalculatorListScreenState extends State<CalculatorListScreen> {
                         hintText: 'Search Calculator',
                         prefixIcon: const Icon(Icons.search),
                         filled: true,
-                        fillColor: Colors.white, // Background putih
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -149,10 +149,10 @@ class CalculatorGridItem extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      calculator['icon'] as IconData,
-                      size: 40,
-                      color: Theme.of(context).primaryColor,
+                    Image(
+                      image: AssetImage(calculator['icon'] as String),
+                      width: 81,
+                      height: 81,
                     ),
                     const SizedBox(height: 8),
                     Text(

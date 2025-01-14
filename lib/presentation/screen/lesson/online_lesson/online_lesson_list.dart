@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
         .listen((snapshot) {
       final lessons = snapshot.docs.map((doc) {
         return {
-          'id': doc.id, // ID dokumen
+          'id': doc.id,
           'title': doc['title'],
           'content': doc['content'],
           'createdAt': doc['createdAt'].toDate(),
@@ -38,7 +37,6 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
       }).toList();
 
       if (mounted) {
-        // Pastikan widget masih ada di tree sebelum memanggil setState
         setState(() {
           _allLessons = lessons;
           _filteredLessons = lessons;
@@ -71,7 +69,7 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
 
   @override
   void dispose() {
-    _lessonSubscription?.cancel(); // Batalkan langganan stream
+    _lessonSubscription?.cancel();
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
@@ -81,7 +79,6 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
     setState(() {
       _searchText = _searchController.text;
 
-      // Filter lessons based on search query
       _filteredLessons = _allLessons.where((lesson) {
         return lesson['title']
             .toLowerCase()
@@ -93,65 +90,75 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorConfig.primaryColor,
-        title: const Text('Materi Online'),
-        foregroundColor: ColorConfig.onPrimaryColor,
-      ),
       floatingActionButton: isAdmin
-          ? Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/addLesson');
-                },
-                backgroundColor: ColorConfig.primaryColor,
-                child: const Icon(Icons.add, color: ColorConfig.onPrimaryColor),
-              ),
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/addLesson');
+              },
+              backgroundColor: ColorConfig.primaryColor,
+              child: const Icon(Icons.add, color: ColorConfig.onPrimaryColor),
             )
           : null,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search Material',
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: _searchText.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  setState(() {
-                                    _filteredLessons = _allLessons;
-                                  });
-                                },
-                              )
-                            : null,
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
+          : CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: ColorConfig.primaryColor,
+                  floating: true,
+                  pinned: false,
+                  snap: true,
+                  title: const Text(
+                    'Materi Offline',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  foregroundColor: Colors.white,
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  expandedHeight: 120.0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search online lessons',
+                              prefixIcon: const Icon(Icons.search),
+                              filled: true,
+                              suffixIcon: _searchText.isNotEmpty
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        _searchController.clear();
+                                        setState(() {
+                                          _filteredLessons = _allLessons;
+                                        });
+                                      },
+                                    )
+                                  : null,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: LessonGrid(filteredLessons: _filteredLessons),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(12.0),
+                  sliver: LessonGrid(filteredLessons: _filteredLessons),
+                ),
+              ],
             ),
     );
   }
@@ -167,83 +174,86 @@ class LessonGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return filteredLessons.isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/ic_notfound.png', height: 120),
-                const SizedBox(height: 16),
-                const Text(
-                  "Material Not Found",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+    if (filteredLessons.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/ic_notfound.png', height: 120),
+              const SizedBox(height: 16),
+              const Text(
+                "Material Not Found",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          )
-        : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-              childAspectRatio: 1,
-            ),
-            itemCount: filteredLessons.length,
-            itemBuilder: (context, index) {
-              final lesson = filteredLessons[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          LessonDetailScreen(lessonId: lesson['id']),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final lesson = filteredLessons[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        LessonDetailScreen(lessonId: lesson['id']),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      color: ColorConfig.primaryColor,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  );
-                },
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 136,
-                        height: 136,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: ColorConfig.gradientBrandReverse,
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.book,
-                                size: 64,
-                                color: Colors.white,
-                              ),
-                              SizedBox(height: 6),
-                            ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.book,
+                          size: 84,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          lesson['title'] as String,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: ColorConfig.onPrimaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        lesson['title'],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: ColorConfig.black,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                  const SizedBox(height: 8),
+                ],
+              ),
+            );
+          },
+          childCount: filteredLessons.length,
+        ),
+      );
+    }
   }
 }

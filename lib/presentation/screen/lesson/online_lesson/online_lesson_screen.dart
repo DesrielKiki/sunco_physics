@@ -33,10 +33,8 @@ class LessonDetailScreen extends StatelessWidget {
           );
         }
 
-        // Extract data from Firestore document
         final lesson = snapshot.data!;
-        final title = lesson['title']
-            as String; // Assuming there's a `title` field in Firestore
+        final title = lesson['title'] as String;
         final content = List<Map<String, dynamic>>.from(lesson['content']);
 
         return Scaffold(

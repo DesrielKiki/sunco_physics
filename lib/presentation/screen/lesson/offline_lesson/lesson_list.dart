@@ -56,7 +56,7 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context),
             ),
-            expandedHeight: 120.0, // Tinggi AppBar termasuk Search Bar
+            expandedHeight: 120.0,
             flexibleSpace: FlexibleSpaceBar(
               background: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -69,7 +69,7 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
                         hintText: 'Search calculators',
                         prefixIcon: const Icon(Icons.search),
                         filled: true,
-                        fillColor: Colors.white, // Tetap putih
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -77,7 +77,7 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8), // Jarak dengan list
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
@@ -112,7 +112,7 @@ class LessonGrid extends StatelessWidget {
               Image.asset('assets/ic_notfound.png', height: 120),
               const SizedBox(height: 16),
               const Text(
-                "Calculator Not Found",
+                "Lesson Not Found",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,

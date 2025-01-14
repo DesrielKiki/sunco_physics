@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:sunco_physics/presentation/screen/history/history_screen.dart';
+
 import 'package:sunco_physics/presentation/screen/home/home_screen.dart';
 import 'package:sunco_physics/presentation/screen/profile/profile_screen.dart';
 import 'package:sunco_physics/presentation/theme/color_config.dart';
@@ -18,7 +18,6 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
   final List<Widget> _pages = <Widget>[
     const HomeScreen(),
     const ProfileScreen(),
-    // const HistoryScreen(),
   ];
 
   void _onPageChanged(int index) {
@@ -43,17 +42,15 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Halaman utama
           PageView(
             controller: _pageController,
             onPageChanged: _onPageChanged,
             children: _pages,
           ),
-          // Bottom Navigation Bar dengan posisi custom
           Positioned(
             left: 0,
             right: 0,
-            bottom: 30, // Atur jarak ke atas
+            bottom: 30,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: ClipRRect(
@@ -62,10 +59,10 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
                   decoration: BoxDecoration(
                     color: ColorConfig.primaryColor,
                     border: Border.all(
-                      color: ColorConfig.black, // Warna border
-                      width: 1.5, // Ketebalan border
+                      color: ColorConfig.black,
+                      width: 1.5,
                     ),
-                    borderRadius: BorderRadius.circular(20), // Sudut border
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: BottomNavigationBar(
                     currentIndex: selectedIndex,
@@ -94,9 +91,8 @@ class _HomeNavigationPageState extends State<HomeNavigationPage> {
                     unselectedItemColor: Colors.grey,
                     showSelectedLabels: true,
                     showUnselectedLabels: false,
-                    elevation: 0, // Hilangkan shadow jika diperlukan
-                    backgroundColor:
-                        Colors.transparent, // Agar mengikuti container
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
                   ),
                 ),
               ),

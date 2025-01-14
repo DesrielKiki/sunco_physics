@@ -167,19 +167,15 @@ class _AddLessonPageState extends State<AddLessonPage> {
                 children: [
                   TextField(
                     controller: _textController,
-                    maxLines:
-                        null, // Membuat TextField fleksibel dengan tinggi dinamis
-                    minLines:
-                        5, // Jumlah baris minimum agar terlihat seperti textarea
-                    keyboardType:
-                        TextInputType.multiline, // Memungkinkan input multiline
+                    maxLines: null,
+                    minLines: 5,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       labelText: 'Add Text',
-                      alignLabelWithHint:
-                          true, // Menyesuaikan label dengan area multiline
+                      alignLabelWithHint: true,
                     ),
                   ),
                   const SizedBox(height: 8),

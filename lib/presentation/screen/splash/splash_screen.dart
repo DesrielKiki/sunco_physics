@@ -68,7 +68,6 @@ class _SplashScreenState extends State<SplashScreen>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? isLoggedIn = prefs.getBool('isLoggedIn');
 
-    // Tunggu animasi selesai sebelum melakukan navigasi
     await Future.delayed(const Duration(seconds: 5));
 
     if (mounted) {

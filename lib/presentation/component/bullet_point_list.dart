@@ -14,22 +14,21 @@ class BulletPointList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding:
-                  EdgeInsets.only(top: 6.0), // Posisikan titik di tengah teks
+              padding: EdgeInsets.only(top: 6.0),
               child: Icon(
-                Icons.circle, // Icon lingkaran kecil
+                Icons.circle,
                 size: 8.0,
                 color: Colors.black,
               ),
             ),
-            const SizedBox(width: 8.0), // Jarak antara titik dan teks
+            const SizedBox(width: 8.0),
             Expanded(
               child: Text(
                 item,
                 style: const TextStyle(
                   fontSize: 16.0,
                   color: Colors.black,
-                  height: 1.5, // Spasi antar baris
+                  height: 1.5,
                 ),
               ),
             ),

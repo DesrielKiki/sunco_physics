@@ -3,7 +3,7 @@ import 'package:sunco_physics/data/model/interactive_point.dart';
 
 class HorizontalLinePainter extends CustomPainter {
   final List<InteractivePoint> points;
-  final List<double> opacityValues; // Opacity untuk garis
+  final List<double> opacityValues;
 
   HorizontalLinePainter({
     required this.points,
@@ -17,18 +17,15 @@ class HorizontalLinePainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke;
 
-    // Menggambar garis horizontal ke kanan dengan opacity
     for (int i = 0; i < points.length; i++) {
       final InteractivePoint point = points[i];
-      final double opacity =
-          opacityValues[i]; // Opacity yang sedang berlaku untuk garis
+      final double opacity = opacityValues[i];
 
       final Offset start = point.position;
       final Offset end = Offset(start.dx + point.lineLength, start.dy);
 
-      // Mengatur opacity garis dengan benar
       linePaint.color = Colors.blue.withOpacity(opacity);
-      canvas.drawLine(start, end, linePaint); // Menggambar garis
+      canvas.drawLine(start, end, linePaint);
     }
   }
 
