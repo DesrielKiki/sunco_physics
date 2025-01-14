@@ -66,7 +66,7 @@ class _OfflineLessonListScreenState extends State<OfflineLessonListScreen> {
                     child: TextField(
                       controller: _searchController,
                       decoration: InputDecoration(
-                        hintText: 'Search calculators',
+                        hintText: 'Search Offline Lessons',
                         prefixIcon: const Icon(Icons.search),
                         filled: true,
                         fillColor: Colors.white,

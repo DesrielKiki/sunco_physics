@@ -127,7 +127,7 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
-                              hintText: 'Search online lessons',
+                              hintText: 'Search Online Lessons',
                               prefixIcon: const Icon(Icons.search),
                               filled: true,
                               suffixIcon: _searchText.isNotEmpty

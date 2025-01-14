@@ -35,16 +35,16 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
     InteractivePoint(
       position: const Offset(150, 200),
       lineLength: 65,
-      title: "Panjang Pegas Awal",
+      title: "Panjang Pegas Akhir",
       description:
-          'Panjang mula-mula pegas sebelum mendapat gaya atau dengan kata lain panjang pegas asli',
+          'Panjang akhir pegas setelah mendapat gaya atau dengan kata lain panjang pegas akhir',
     ),
     InteractivePoint(
       position: const Offset(220, 80),
       lineLength: 185,
-      title: "Panjang Pegas Akhir",
+      title: "Panjang Pegas Awal",
       description:
-          'Panjang akhir pegas setelah mendapat gaya atau dengan kata lain panjang pegas akhir',
+          'Panjang mula-mula pegas sebelum mendapat gaya atau dengan kata lain panjang pegas asli',
     ),
   ];
 

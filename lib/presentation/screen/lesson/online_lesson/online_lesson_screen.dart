@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sunco_physics/presentation/theme/color_config.dart';
 
 class LessonDetailScreen extends StatelessWidget {
   final String lessonId;
@@ -21,7 +22,11 @@ class LessonDetailScreen extends StatelessWidget {
 
         if (snapshot.hasError) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Error')),
+            appBar: AppBar(
+              title: const Text('Error'),
+              backgroundColor: ColorConfig.redWarning,
+              foregroundColor: ColorConfig.onPrimaryColor,
+            ),
             body: const Center(child: Text('Error fetching lesson data')),
           );
         }
@@ -38,7 +43,11 @@ class LessonDetailScreen extends StatelessWidget {
         final content = List<Map<String, dynamic>>.from(lesson['content']);
 
         return Scaffold(
-          appBar: AppBar(title: Text(title)),
+          appBar: AppBar(
+            title: Text(title),
+            backgroundColor: ColorConfig.primaryColor,
+            foregroundColor: ColorConfig.onPrimaryColor,
+          ),
           body: ListView(
             padding: const EdgeInsets.all(16.0),
             children: content.map((item) {

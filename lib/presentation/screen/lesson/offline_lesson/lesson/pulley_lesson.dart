@@ -19,21 +19,21 @@ class _PulleyLessonScreenState extends State<PulleyLessonScreen>
   final List<InteractivePoint> points = [
     InteractivePoint(
       position: const Offset(150, 100),
-      lineLength: 200,
+      lineLength: 150,
       title: "Tegangan Tali",
       description:
           'Tegangan tali adalah gaya yang bekerja pada tali ketika tali tersebut menarik atau menahan suatu benda. Tegangan ini terjadi karena tali mentransfer gaya dari satu benda ke benda lain. Misalnya, ketika menarik sebuah ember dengan tali, gaya yang diberikan diteruskan melalui tegangan tali ke ember. Tegangan selalu bekerja sepanjang arah tali dan biasanya dianggap seragam jika tali tidak elastis dan ringan.',
     ),
     InteractivePoint(
       position: const Offset(225, 190),
-      lineLength: 125,
+      lineLength: 75,
       title: "Gaya Tarik",
       description:
           'Gaya tarik adalah gaya yang diberikan untuk menarik suatu benda ke arah tertentu. Misalnya, gaya ini terjadi saat seseorang menarik tali, membuka pintu, atau menarik gerobak. Gaya tarik bekerja untuk menggerakkan benda mendekat ke arah sumber gaya dan dapat dihasilkan oleh berbagai hal, seperti tangan, mesin, atau alat lainnya.',
     ),
     InteractivePoint(
       position: const Offset(150, 280),
-      lineLength: 200,
+      lineLength: 150,
       title: "Massa",
       description:
           'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',

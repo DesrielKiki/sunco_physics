@@ -142,9 +142,10 @@ class CalculatorGridItem extends StatelessWidget {
                 Navigator.pushNamed(context, calculator['route'] as String);
               },
               child: Card(
+                color: ColorConfig.primaryColor,
                 elevation: 4,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -159,6 +160,7 @@ class CalculatorGridItem extends StatelessWidget {
                       calculator['title'] as String,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
+                        color: ColorConfig.onPrimaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

@@ -30,119 +30,130 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadLoginStatus();
   }
 
-  void _showAlertDialog() {
-    setState(() {
-      showBlurOverlay = true;
-    });
+  @override
+  void dispose() {
+    // Batalkan operasi yang sedang berjalan jika diperlukan
+    super.dispose();
+  }
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Stack(
-          children: [
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
-              ),
-            ),
-            AlertDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              contentPadding: EdgeInsets.zero,
-              content: Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+  void _showAlertDialog() {
+    if (mounted) {
+      setState(
+        () {
+          showBlurOverlay = true;
+        },
+      );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Stack(
+            children: [
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: Colors.black.withOpacity(0.3),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: ColorConfig.darkBlue,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 12.0,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Icon(
-                          Icons.warning_amber_rounded,
-                          color: ColorConfig.onPrimaryColor,
-                          size: 50,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Not Available",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Please log in first",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          showBlurOverlay = false;
-                        });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const LoginScreen()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorConfig.darkBlue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const SizedBox(
+              ),
+              AlertDialog(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                contentPadding: EdgeInsets.zero,
+                content: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.9,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
                         width: double.infinity,
-                        child: Text(
-                          "Sign In",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
+                        decoration: const BoxDecoration(
+                          color: ColorConfig.darkBlue,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 12.0,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.0),
+                          child: Icon(
+                            Icons.warning_amber_rounded,
                             color: ColorConfig.onPrimaryColor,
-                            fontWeight: FontWeight.bold,
+                            size: 50,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Not Available",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "Please log in first",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showBlurOverlay = false;
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const LoginScreen()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorConfig.darkBlue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            "Sign In",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: ColorConfig.onPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    ).then((_) {
-      setState(() {
-        showBlurOverlay = false;
+            ],
+          );
+        },
+      ).then((_) {
+        if (mounted) {
+          setState(() {
+            showBlurOverlay = false;
+          });
+        }
       });
-    });
+    }
   }
 
   @override
@@ -158,7 +169,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 64.0, vertical: 52.0),
+                    horizontal: 64.0,
+                    vertical: 52.0,
+                  ),
                   decoration: const BoxDecoration(
                     color: ColorConfig.darkBlue,
                     borderRadius: BorderRadius.only(
