@@ -22,19 +22,22 @@ class _PotentialEnergyLessonScreenState
       position: const Offset(96, 105),
       lineLength: 200,
       title: "Massa",
-      description: '',
+      description:
+          'Massa adalah gaya yang ditimbulkan oleh gravitasi pada sebuah benda. Massa menunjukkan seberapa kuat gravitasi menarik benda tersebut ke bawah. Berat berbeda dari massa, karena berat tidak tergantung pada gravitasi, sedangkan massa iya. Misalnya: Di Bumi, kamu merasa lebih "berat" karena gravitasi Bumi lebih besar. Di Bulan, kamu akan merasa lebih "ringan" karena gravitasi Bulan lebih kecil. Massa biasanya diukur dalam satuan Newton (N), sedangkan berat diukur dalam kilogram (kg)',
     ),
     InteractivePoint(
       position: const Offset(134.5, 105),
       lineLength: 140,
       title: "Percepatan Gravitasi",
-      description: '',
+      description:
+          'Percepatan gravitasi adalah percepatan yang dialami oleh benda saat jatuh bebas akibat tarikan gravitasi suatu planet atau benda langit. Di Bumi, percepatan gravitasi rata-rata bernilai 9,8 m/s². Artinya, setiap detik benda yang jatuh akan bertambah kecepatannya sebesar 9,8 meter per detik, jika tidak ada hambatan seperti udara. Sebagai contoh, jika sebuah apel jatuh dari pohon, percepatan gravitasi ini yang membuatnya semakin cepat saat mendekati tanah.',
     ),
     InteractivePoint(
       position: const Offset(176, 270),
       lineLength: 50,
       title: "Tinggi",
-      description: '',
+      description:
+          'Tinggi adalah jarak vertikal dari suatu benda, titik, atau objek diukur dari permukaan tertentu, biasanya permukaan tanah atau dasar lainnya. Tinggi menunjukkan seberapa jauh sesuatu berada di atas atau di bawah titik acuan tersebut.',
     ),
   ];
 

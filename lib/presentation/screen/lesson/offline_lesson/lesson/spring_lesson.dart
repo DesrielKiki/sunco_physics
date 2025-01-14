@@ -55,9 +55,13 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
   late List<bool> clickedPoints;
   late List<double> opacityValues;
 
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController = ScrollController();
 
     clickedPoints = List.generate(points1.length, (_) => false);
     opacityValues = List.generate(points1.length, (_) => 1.0);
@@ -99,6 +103,8 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
 
   @override
   void dispose() {
+    _scrollController.dispose();
+
     for (var controller in _animationControllers1) {
       controller.dispose();
     }
@@ -120,19 +126,26 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
   }
 
   void _onPoint1Clicked(int index) {
-    if (!clickedPoints[index]) {
-      setState(() {
-        opacityValues[index] = 1.0;
-        clickedPoints[index] = true;
-      });
-
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _animationControllers1[index].stop();
-
-        _showDescription(points1[index].description, points1[index].title);
-      });
+    if (points1[index].title == "Koefisien Gaya Gesek") {
+      _scrollController.animateTo(
+        1500.0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
     } else {
-      _showDescription(points1[index].description, points1[index].title);
+      if (!clickedPoints[index]) {
+        setState(() {
+          opacityValues[index] = 1.0;
+          clickedPoints[index] = true;
+        });
+
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _animationControllers1[index].stop();
+          _showDescription(points1[index].description, points1[index].title);
+        });
+      } else {
+        _showDescription(points1[index].description, points1[index].title);
+      }
     }
   }
 
@@ -164,6 +177,7 @@ class _SpringLessonScreenState extends State<SpringLessonScreen>
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +21,13 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
   bool isAdmin = false;
   bool isLoading = true;
 
-  // Fetch lessons from Firestore
-  Future<void> _fetchLessons() async {
-    setState(() {
-      isLoading = true;
-    });
+  StreamSubscription? _lessonSubscription;
 
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('lessons').get();
+  void _fetchLessons() {
+    _lessonSubscription = FirebaseFirestore.instance
+        .collection('lessons')
+        .snapshots()
+        .listen((snapshot) {
       final lessons = snapshot.docs.map((doc) {
         return {
           'id': doc.id, // ID dokumen
@@ -37,19 +37,15 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
         };
       }).toList();
 
-      setState(() {
-        _allLessons = lessons;
-        _filteredLessons = lessons; // Initially show all lessons
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching lessons: $e')),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+      if (mounted) {
+        // Pastikan widget masih ada di tree sebelum memanggil setState
+        setState(() {
+          _allLessons = lessons;
+          _filteredLessons = lessons;
+          isLoading = false;
+        });
+      }
+    });
   }
 
   void _checkAdminStatus() async {
@@ -75,6 +71,7 @@ class _OnlineLessonListScreenState extends State<OnlineLessonListScreen> {
 
   @override
   void dispose() {
+    _lessonSubscription?.cancel(); // Batalkan langganan stream
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
